@@ -2,6 +2,7 @@ package org.hh.museli
 
 import Greeting
 import SERVER_PORT
+import getPlatform
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -16,7 +17,7 @@ fun main() {
 fun Application.module() {
     routing {
         get("/") {
-            call.respondText("Ktor: ${Greeting().greet()}")
+            call.respondText("Ktor: ${getPlatform()}")
         }
     }
 }

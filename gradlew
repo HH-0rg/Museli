@@ -26,7 +26,7 @@
 #       noncompliant, but you have some other compliant shell such as ksh or
 #       bash, then to run this script, type that shell name before the whole
 #       command line, like:
-#
+#c
 #           ksh Gradle
 #
 #       Busybox and similar reduced shells will NOT work, because this script
