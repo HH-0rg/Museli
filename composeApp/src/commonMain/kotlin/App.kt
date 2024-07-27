@@ -5,6 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -22,8 +23,10 @@ fun App(songsList: Array<String> = arrayOf("Superman", "batman", "Shaktiman", "H
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 //            MusicPlayer()
 
-            songsList.forEach { song ->
-                Text(song)
+            LazyColumn {
+                items(songsList.size) { song ->
+                    Text(songsList[song])
+                }
             }
             Column {
                 Box(

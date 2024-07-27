@@ -11,8 +11,11 @@ fun getSongs(context: Context): Array<String> {
         MediaStore.Audio.AudioColumns.ALBUM,
         MediaStore.Audio.ArtistColumns.ARTIST
     )
-    val selection = "${MediaStore.Audio.Media.DATA} LIKE ?"
-    val selectionArgs = arrayOf("%$folderName%")
+    val selection = "${MediaStore.Audio.Media.DATA} LIKE ? AND ${MediaStore.Audio.Media.DATA} NOT LIKE ?"
+    val selectionArgs = arrayOf(
+        "$folderName%",  // Include only files in the specific folder
+        "$folderName%/%" // Exclude files in subdirectories
+    )
     val cursor = context.contentResolver.query(uri, projection, selection, selectionArgs, null)
 
     cursor?.use {
