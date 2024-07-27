@@ -1,5 +1,14 @@
-fun getSongs(): Array<String> {
-    return arrayOf("Superman", "batman", "Shaktiman", "Hanuman")
+import java.io.File
+
+fun getSongs(directoryPath: String): Array<String> {
+    val directory = File(directoryPath)
+    return if (directory.isDirectory) {
+        directory.listFiles { file -> file.isFile && file.extension in listOf("mp3", "wav", "flac", "opus") }
+            ?.map { it.name }
+            ?.toTypedArray() ?: emptyArray()
+    } else {
+        emptyArray()
+    }
 }
 
 fun getPlaylists(): Map<String, Array<String>> {
