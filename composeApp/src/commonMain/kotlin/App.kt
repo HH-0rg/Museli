@@ -2,8 +2,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -18,7 +16,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App(songsList: Array<String> = arrayOf("Superman", "batman", "Shaktiman", "Hanuman")) {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
+
+//        val navController = rememberNavController()
+
+//        Scaffold(
+//            content = { padding ->
+//                AppNavHost(navController = navController)
+//            }
+//        )
 
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 //            MusicPlayer()
