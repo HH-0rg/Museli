@@ -2,14 +2,24 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.*
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsChannel
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-val SongsEp = "/api/songs"
-var testingMusicDir = "/Users/savitar/Music"
+val ListSongsEp = "/api/listsongs"
+val SongEp = "/api/song"
+var testingMusicDir = "C:\\Users\\manas\\Music\\"
+
 @Serializable
 data class Songs(val songs: List<String>)
+
+@Serializable
+data class SongRequest(val song: String)
 
 suspend fun getSongsRemote(remote: String): List<String> {
     val client = HttpClient {
@@ -19,7 +29,7 @@ suspend fun getSongsRemote(remote: String): List<String> {
     }
 
     return try {
-        client.get("${remote}${SongsEp}").body<Songs>().songs
+        client.get("${remote}${ListSongsEp}").body<Songs>().songs
     } catch (e: Exception) {
         println("Error fetching songs: ${e.message}")
         emptyList()
