@@ -1,13 +1,13 @@
 import android.content.Context
 import android.provider.MediaStore
 
-fun getSongs(context: Context): Array<String> {
+fun getSongs(context: Context): List<String> {
     val folderName = "/storage/emulated/0/Music/"
     val tempAudioList = mutableListOf<String>()
     val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     val projection = arrayOf(
         MediaStore.Audio.AudioColumns.DATA,
-        // not using these, but maybe they'll be useful later
+        // Not using these, but maybe they'll be useful later
         MediaStore.Audio.AudioColumns.ALBUM,
         MediaStore.Audio.ArtistColumns.ARTIST
     )
@@ -26,5 +26,5 @@ fun getSongs(context: Context): Array<String> {
         }
     }
 
-    return tempAudioList.toTypedArray()
+    return tempAudioList
 }

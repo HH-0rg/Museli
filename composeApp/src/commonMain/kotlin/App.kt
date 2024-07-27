@@ -16,7 +16,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App(songsList: Array<String> = arrayOf("Superman", "batman", "Shaktiman", "Hanuman")) {
+fun App(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Hanuman")) {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
 
