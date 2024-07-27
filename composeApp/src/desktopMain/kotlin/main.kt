@@ -6,6 +6,6 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "Museli",
     ) {
-        App()
+        App(getSongs())
     }
 }
