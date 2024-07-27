@@ -12,17 +12,35 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+
 
 @Composable
 @Preview
-fun App(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Hanuman")) {
+fun App(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Hanuman"), navController: NavHostController = rememberNavController()) {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+        NavHost(
+            navController = navController,
+            startDestination = "music_player",
+
+        ) {
+            composable(route = "music_player") {
+                MusicPlayer()
+            }
+            composable(route = "playlist_screen") {
+                PlayLists()
+            }
+        }
 
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 //            MusicPlayer()
-
             LazyColumn {
                 items(songsList.size) { song ->
                     Text(songsList[song])
@@ -38,11 +56,11 @@ fun App(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Han
                         modifier = Modifier.align(Alignment.BottomCenter)
                     ) {
                         // BottomAppBar content here
-                        IconButton(onClick = { /* Do something */ }) {
+                        IconButton(onClick = { navController.navigate("music_player") }) {
                             Icon(Icons.Default.Home, contentDescription = "Home")
                         }
                         Spacer(Modifier.weight(1f, true))
-                        IconButton(onClick = { /* Do something */ }) {
+                        IconButton(onClick = { navController.navigate("playlist_screen") }) {
                             Icon(Icons.Default.PlayArrow, contentDescription = "Player")
                         }
                         Spacer(Modifier.weight(1f, true))
