@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 val SongsEp = "/api/songs"
-var testingMusicDir = "C:\\Users\\manas\\Music\\"
+var testingMusicDir = "/Users/savitar/Music"
 @Serializable
 data class Songs(val songs: List<String>)
 
