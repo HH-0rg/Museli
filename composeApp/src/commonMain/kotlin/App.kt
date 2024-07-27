@@ -2,6 +2,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,11 +18,39 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App(songsList: Array<String> = arrayOf("Superman", "batman", "Shaktiman", "Hanuman")) {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Songs")
+//            MusicPlayer()
+
+            songsList.forEach { song ->
+                Text(song)
+            }
             Column {
-                songsList.forEach { song ->
-                    Text(song)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding()
+                ) {
+                    BottomAppBar(
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    ) {
+                        // BottomAppBar content here
+                        IconButton(onClick = { /* Do something */ }) {
+                            Icon(Icons.Default.Home, contentDescription = "Home")
+                        }
+                        Spacer(Modifier.weight(1f, true))
+                        IconButton(onClick = { /* Do something */ }) {
+                            Icon(Icons.Default.PlayArrow, contentDescription = "Player")
+                        }
+                        Spacer(Modifier.weight(1f, true))
+                        IconButton(onClick = { /* Do something */ }) {
+                            Icon(Icons.Default.List, contentDescription = "Playlists")
+                        }
+                        Spacer(Modifier.weight(1f, true))
+                        IconButton(onClick = { /* Do something */ }) {
+                            Icon(Icons.Default.Settings, contentDescription = "Settings")
+                        }
+                    }
                 }
             }
         }
