@@ -17,15 +17,18 @@ fun PlayLists(
     rootPicker: suspend () -> String?
 ) {
     var songsList by remember { mutableStateOf(emptyList<String>()) }
-    var rootDir by remember { mutableStateOf<String?>(null) }
+    var rootDir by remember { mutableStateOf<String?>(GlobalState.rootDirectory) }
 
     LaunchedEffect(Unit) {
-        rootDir = rootPicker()
-        rootDir?.let {
-            mediaPlayerController.setRoot(it)
-            val loadedSongs = mediaPlayerController.loadSongList()
-            songsList = loadedSongs
+        if (rootDir == null) {
+            rootDir = rootPicker()
+            rootDir?.let {
+                mediaPlayerController.setRoot(it)
+                GlobalState.rootDirectory = it.toString()
+            }
         }
+        val loadedSongs = mediaPlayerController.loadSongList()
+        songsList = loadedSongs
     }
 
     return Scaffold(backgroundColor = Color.Black) {

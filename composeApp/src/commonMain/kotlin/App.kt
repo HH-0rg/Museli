@@ -27,6 +27,10 @@ import androidx.navigation.navArgument
 import io.github.vinceglb.filekit.core.FileKit
 import museli.composeapp.generated.resources.Res
 
+object GlobalState {
+    var rootDirectory: String? = null
+}
+
 @Composable
 @Preview
 fun App(
