@@ -58,4 +58,13 @@ With Museli the possibilities are endless:
 
 ##### Current state
 
-The code is super vaporwave, well it is a hackathon product. So it will be tough to get it running, however since, I'm annoyed with the lack of playlists sync in my beautiful semi-self-hosted music setup, you can surely expect it to get better.
+The code is super vaporwave, well, it is a POC hackathon product. So it will be tough to get it running, however since, I'm annoyed with the lack of playlists sync in my beautiful semi-self-hosted music setup, you can surely expect it to get better.
+
+##### Build & Run instructions
+
+You can open the project in the Fleet editor and the Run button will allow you to build and run all versions of the project. Alternate options(Since fleet kept crashing on me...):
+
+- Android: Use android studio
+- Desktop: `./gradlew desktopRun -DmainClass=MainKt`
+- Web backend: `./gradlew :server:run --args="C:\\Users\\manas\\Music localhost:8081"`. Where first arg is your music dir and ssecond arg is host of frontend(to allow CORS)
+- Web frontend(WASM): `./gradlew wasmJsBrowserRun`
