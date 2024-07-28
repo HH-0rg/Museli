@@ -19,6 +19,14 @@ expect class MediaPlayerController(platformContext: PlatformContext) {
     fun mediaDuration(): Long?
 
     fun setTime(time: Long)
+
+    fun nextTrack()
+
+    fun previousTrack()
+
+    fun getCurrentSong(): String?
+
+    fun setCurrentSongIdx(idx: Int)
 }
 
 expect class PlatformContext

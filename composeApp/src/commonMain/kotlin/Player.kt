@@ -15,7 +15,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 @Preview
-fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
+fun MusicPlayer(mediaPlayerController: MediaPlayerController) {
 
     var songsList: List<String> = emptyList()
     var rootDir_: String? = null
@@ -28,29 +28,36 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
     var isRepeating by remember { mutableStateOf(false) }
     var currentPosition: Long by remember { mutableStateOf(0) }
 
-    LaunchedEffect(Unit) {
-        if (song == null) {
+    fun prepareMedia() {
+        if (mediaPlayerController.getCurrentSong() == null) {
             println("No song to play")
         } else {
 
-            mediaPlayerController.prepare(song, listener = object : MediaPlayerListener {
-                override fun onReady() {
-                    println("ready")
-                }
+            mediaPlayerController.prepare(
+                mediaPlayerController.getCurrentSong()!!,
+                listener = object : MediaPlayerListener {
+                    override fun onReady() {
+                        println("ready")
+                    }
 
-                override fun onAudioCompleted() {
-                    println("audio completed")
-                }
+                    override fun onAudioCompleted() {
+                        println("audio completed")
+                    }
 
-                override fun onError() {
-                    println("error")
-                }
-            })
+                    override fun onError() {
+                        println("error")
+                    }
+                })
             mediaPlayerController.start()
             maxDuration =
                 if (mediaPlayerController.mediaDuration() != null && mediaPlayerController.mediaDuration()!! > 0) mediaPlayerController.mediaDuration()
                     ?.toLong()!! else 0L
         }
+
+    }
+
+    LaunchedEffect(Unit) {
+        prepareMedia()
     }
 
     LaunchedEffect("MediaController") {
@@ -71,7 +78,7 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "$song", fontSize = 24.sp, style = MaterialTheme.typography.h6)
+            Text(text = "${mediaPlayerController.getCurrentSong()}", fontSize = 24.sp, style = MaterialTheme.typography.h6)
             Text(
                 text = "${formatDuration(currentPosition)} / ${formatDuration(mediaPlayerController.mediaDuration())}",
                 fontSize = 24.sp,
@@ -102,7 +109,10 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
                         contentDescription = if (isShuffling) "Shuffle On" else "Shuffle Off"
                     )
                 }
-                IconButton(onClick = { mediaPlayerController.start() }) {
+                IconButton(onClick = {
+                    mediaPlayerController.previousTrack()
+                    prepareMedia()
+                }) {
                     Icon(imageVector = Icons.Filled.SkipPrevious, contentDescription = "Previous")
                 }
                 IconButton(onClick = { if (mediaPlayerController.isPlaying()) mediaPlayerController.pause() else mediaPlayerController.start() }) {
@@ -111,7 +121,10 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
                         contentDescription = if (isPlaying) "Pause" else "Play"
                     )
                 }
-                IconButton(onClick = { mediaPlayerController.start() }) {
+                IconButton(onClick = {
+                    mediaPlayerController.nextTrack()
+                    prepareMedia()
+                }) {
                     Icon(imageVector = Icons.Filled.SkipNext, contentDescription = "Next")
                 }
                 IconButton(onClick = { mediaPlayerController.setTime(30000) }) {

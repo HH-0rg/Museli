@@ -73,11 +73,9 @@ fun App(
 
                     ) {
                     composable(
-                        route = "music_player/{currentSong}",
-                        arguments = listOf(navArgument("currentSong") { defaultValue = "" })
-                    ) { backStackEntry ->
-                        val currentSong = backStackEntry.arguments?.getString("currentSong") ?: ""
-                        MusicPlayer(mediaPlayerController, currentSong)
+                        route = "music_player",
+                    ) {
+                        MusicPlayer(mediaPlayerController)
                     }
                     composable(route = "home_page") {
                         HomePage()

@@ -14,6 +14,8 @@ actual class MediaPlayerController actual constructor(private val platformContex
     val player = ExoPlayer.Builder(platformContext.applicationContext).build()
 
     private val songMap: MutableMap<String, String> = mutableMapOf()
+    private val songsList: MutableList<String> = mutableListOf()
+    private var currentSongIndex: Int? = null
 
     actual suspend fun loadSongList(): List<String> {
         val safeRootDir = platformContext.rootDir ?: return emptyList() // Handle null case if necessary
@@ -48,7 +50,11 @@ actual class MediaPlayerController actual constructor(private val platformContex
             }
         }
 
-        return tempAudioList
+//        return tempAudioList
+        songsList.clear()
+        songsList.addAll(tempAudioList)
+        currentSongIndex = if (songsList.isNotEmpty()) 0 else null
+        return songsList
     }
     actual fun setRoot(newRoot: String) {
         platformContext.rootDir = newRoot
@@ -121,6 +127,26 @@ actual class MediaPlayerController actual constructor(private val platformContex
 
     actual fun isPlaying(): Boolean {
         return player.isPlaying
+    }
+
+    actual fun nextTrack() {
+        if (songsList.isNotEmpty() && currentSongIndex != null) {
+            currentSongIndex = (currentSongIndex!! + 1) % songsList.size
+        }
+    }
+
+    actual fun previousTrack() {
+        if (songsList.isNotEmpty() && currentSongIndex != null) {
+            currentSongIndex = (currentSongIndex!! - 1 + songsList.size) % songsList.size
+        }
+    }
+
+    actual fun getCurrentSong(): String? {
+        return currentSongIndex?.let { songsList[it] }
+    }
+
+    actual fun setCurrentSongIdx(idx: Int) {
+        currentSongIndex = idx
     }
 }
 

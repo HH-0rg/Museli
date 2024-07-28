@@ -36,7 +36,10 @@ fun PlayLists(
             Text("Songs in the playlist", color = Color.White)
             LazyColumn {
                 items(songsList.size) { song ->
-                    TextButton(onClick = { navController.navigate("music_player/${songsList[song]}") }) {
+                    TextButton(onClick = {
+                        mediaPlayerController.setCurrentSongIdx(song)
+                        navController.navigate("music_player")
+                    }) {
                         Text(songsList[song], color = Color.White)
                     }
                 }
