@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.filled.*
 import io.github.vinceglb.filekit.core.FileKit
+import kotlinx.coroutines.delay
 
 @Composable
 @Preview
@@ -21,10 +22,11 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
 
     var isPlaying by remember { mutableStateOf(false) }
 
-    var currentPosition by mutableStateOf(0f)
-    var maxDuration by mutableStateOf(1f)
-    var isShuffling by mutableStateOf(false)
-    var isRepeating by mutableStateOf(false)
+
+    var maxDuration: Long by remember { mutableStateOf(0) }
+    var isShuffling by remember { mutableStateOf(false) }
+    var isRepeating by remember { mutableStateOf(false) }
+    var currentPosition: Long by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         if (song == null) {
@@ -45,9 +47,21 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
                 }
             })
             mediaPlayerController.start()
+            maxDuration =
+                if (mediaPlayerController.mediaDuration() != null && mediaPlayerController.mediaDuration()!! > 0) mediaPlayerController.mediaDuration()
+                    ?.toLong()!! else 0L
         }
     }
-    println(mediaPlayerController.seek())
+
+    LaunchedEffect("MediaController") {
+//        while (mediaPlayerController.isPlaying()) { // need to comment this out for android
+        while (true) {
+            delay(1000) // Update every second
+            println(mediaPlayerController.seek())
+            currentPosition = if (mediaPlayerController.seek() != null) mediaPlayerController.seek()!! else 0L
+            println("current $currentPosition")
+        }
+    }
 
     Scaffold(backgroundColor = Color.White) {
         Column(
@@ -58,16 +72,21 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(text = "$song", fontSize = 24.sp, style = MaterialTheme.typography.h6)
-            Text(text = "${mediaPlayerController.seek()}", fontSize = 24.sp, style = MaterialTheme.typography.h6)
+            Text(
+                text = "${formatDuration(currentPosition)} / ${formatDuration(mediaPlayerController.mediaDuration())}",
+                fontSize = 24.sp,
+                style = MaterialTheme.typography.h6
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Text("${mediaPlayerController.mediaDuration()}")
             Slider(
-                value = currentPosition,
+                value = currentPosition.toFloat(),
                 onValueChange = {
-                    currentPosition = it
+                    currentPosition = it.toLong()
+                    mediaPlayerController.setTime(it.toLong())
 //                    mediaPlayer?.seekTo(it.toInt())
                 },
-                valueRange = 0f..maxDuration
+                valueRange = 0f..((if (mediaPlayerController.mediaDuration() != null && mediaPlayerController.mediaDuration()!! > 0) mediaPlayerController.mediaDuration()
+                    ?.toLong()!! else 0).toFloat())
             )
             Spacer(modifier = Modifier.height(16.dp))
             Row(
@@ -77,6 +96,15 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                IconButton(onClick = {}) {
+                    Icon(
+                        imageVector = if (isShuffling) Icons.Filled.Shuffle else Icons.Filled.Shuffle,
+                        contentDescription = if (isShuffling) "Shuffle On" else "Shuffle Off"
+                    )
+                }
+                IconButton(onClick = { mediaPlayerController.start() }) {
+                    Icon(imageVector = Icons.Filled.SkipPrevious, contentDescription = "Previous")
+                }
                 IconButton(onClick = { if (mediaPlayerController.isPlaying()) mediaPlayerController.pause() else mediaPlayerController.start() }) {
                     Icon(
                         imageVector = if (mediaPlayerController.isPlaying()) Icons.Filled.Pause else Icons.Filled.PlayArrow,
@@ -86,13 +114,7 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
                 IconButton(onClick = { mediaPlayerController.start() }) {
                     Icon(imageVector = Icons.Filled.SkipNext, contentDescription = "Next")
                 }
-                IconButton(onClick = {}) {
-                    Icon(
-                        imageVector = if (isShuffling) Icons.Filled.Shuffle else Icons.Filled.Shuffle,
-                        contentDescription = if (isShuffling) "Shuffle On" else "Shuffle Off"
-                    )
-                }
-                IconButton(onClick = {mediaPlayerController.setTime(30000)}) {
+                IconButton(onClick = { mediaPlayerController.setTime(30000) }) {
                     Icon(
                         imageVector = if (isRepeating) Icons.Filled.RepeatOne else Icons.Filled.Repeat,
                         contentDescription = if (isRepeating) "Repeat One" else "Repeat"

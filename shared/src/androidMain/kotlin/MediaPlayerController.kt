@@ -100,11 +100,19 @@ actual class MediaPlayerController actual constructor(private val platformContex
     }
 
     actual fun seek(): Long? {
-        return  player.currentPosition
+        println(player.currentPosition)
+        println(player.duration)
+        println(player.contentDuration)
+        println(player.contentPosition)
+        println(player.currentMediaItem)
+        println("player.currentMediaItem")
+
+
+        return  player.contentPosition
     }
 
     actual fun mediaDuration(): Long? {
-        return player.contentDuration
+        return player.duration
     }
 
     actual fun setTime(time: Long) {
