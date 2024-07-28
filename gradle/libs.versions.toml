@@ -55,6 +55,7 @@ vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcj" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 filekit-compose = {module = "io.github.vinceglb:filekit-compose", version.ref = "filekit" }
 material-icons-extended-wasm-js = {  group = "org.jetbrains.compose.material", name = "material-icons-extended", version.ref = "icon-extended"}
+androidx-media3-common = { group = "androidx.media3", name = "media3-common", version.ref = "media3Common" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

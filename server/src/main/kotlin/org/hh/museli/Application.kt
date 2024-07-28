@@ -21,7 +21,7 @@ import io.ktor.server.plugins.cors.routing.CORS
 import kotlinx.serialization.json.Json
 import java.io.File
 
-val rootDir = "C:\\Users\\manas\\Music"
+val rootDir = "/Users/savitar/Music"
 
 fun main() {
     embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)

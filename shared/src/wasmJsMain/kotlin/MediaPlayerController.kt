@@ -47,6 +47,19 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         return !audioElement.paused
     }
 
+    actual fun seek(): Long? {
+        return audioElement.currentTime.toLong()
+    }
+
+    actual fun mediaDuration(): Long? {
+        return audioElement.duration.toLong()
+    }
+
+    actual fun setTime(time: Long) {
+//        mediaPlayer?.controls()?.setTime(time)
+        audioElement.currentTime = time.toDouble()
+    }
+
     actual fun release() {
     }
 
