@@ -1,5 +1,6 @@
 package org.hh.museli
 
+import ListPlaylistsEp
 import SERVER_PORT
 import Songs
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
@@ -10,7 +11,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.serialization.kotlinx.json.*
 import ListSongsEp
+import Playlists
 import SongEp
+import getPlaylists
 import getSongs
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -56,13 +59,43 @@ fun Application.module() {
                 contentType = ContentType.Application.Json.withCharset(Charsets.UTF_8)
             )
         }
+        get(ListPlaylistsEp) {
+            call.respondText(
+                text = Json.encodeToString(Playlists.serializer(), Playlists(getPlaylists(rootDir))),
+                contentType = ContentType.Application.Json.withCharset(Charsets.UTF_8)
+            )
+        }
         // Route to serve a song file by filename
         get("$SongEp/{songName}") {
             val songName = call.parameters["songName"]
             if (songName != null) {
                 val songFile = File(rootDir, songName)
 
-                if (songFile.exists() && songFile.isFile && songFile.parentFile.canonicalPath == File(rootDir).canonicalPath) {
+                if (songFile.exists() && songFile.isFile && (songFile.parentFile.canonicalPath == File(rootDir).canonicalPath)) {
+                    call.respondFile(songFile)
+                } else {
+                    call.respondText(
+                        text = "Error: File not found or access denied.",
+                        contentType = ContentType.Text.Plain,
+                        status = HttpStatusCode.NotFound
+                    )
+                }
+            } else {
+                call.respondText(
+                    text = "Error: Invalid request.",
+                    contentType = ContentType.Text.Plain,
+                    status = HttpStatusCode.BadRequest
+                )
+            }
+        }
+        // Route to serve a song file by filename
+        get("$SongEp/{playlist}/{songName}") {
+            val songName = call.parameters["songName"]
+            val playlist = call.parameters["playlist"]
+            if (songName != null) {
+                val songFile = File(rootDir, "$playlist/$songName")
+
+                if (songFile.exists() && songFile.isFile && (songFile.parentFile.parentFile.canonicalPath == File(rootDir).canonicalPath)) {
                     call.respondFile(songFile)
                 } else {
                     call.respondText(

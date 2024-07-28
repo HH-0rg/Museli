@@ -7,6 +7,7 @@ import uk.co.caprica.vlcj.player.base.State
 import uk.co.caprica.vlcj.player.component.AudioPlayerComponent
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
+import java.io.File
 import java.nio.file.Paths
 import java.sql.Time
 import java.util.Locale
@@ -40,6 +41,10 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
             }
         })
 
+    }
+
+    actual suspend fun loadPlaylists(): Map<String, List<String>> {
+        return getPlaylists(platformContext.rootDir)
     }
 
     actual fun setRoot(newRoot: String) {

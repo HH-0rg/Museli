@@ -28,6 +28,12 @@ fun PlayLists(
             }
         }
         val loadedSongs = mediaPlayerController.loadSongList()
+        for ((directory, songs) in mediaPlayerController.loadPlaylists()) {
+            println("Directory: $directory")
+            for (song in songs) {
+                println("  Song: $song")
+            }
+        }
         songsList = loadedSongs
     }
 

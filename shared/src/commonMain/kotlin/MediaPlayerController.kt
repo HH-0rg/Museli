@@ -1,6 +1,8 @@
 // Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
 expect class MediaPlayerController(platformContext: PlatformContext) {
     suspend fun loadSongList(): List<String>
+
+    suspend fun loadPlaylists(): Map<String, List<String>>
     fun setRoot(newRoot: String)
     fun prepare(song: String, listener: MediaPlayerListener)
 
