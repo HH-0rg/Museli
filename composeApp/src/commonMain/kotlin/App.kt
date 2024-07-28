@@ -25,11 +25,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import io.github.vinceglb.filekit.core.FileKit
+import museli.composeapp.generated.resources.Res
 
 @Composable
 @Preview
 fun App(
-    mediaPlayerController: MediaPlayerController
+    mediaPlayerController: MediaPlayerController,
+    rootPicker: suspend () -> String?
 ) {
     val navController: NavHostController = rememberNavController()
     var songsList: List<String> = emptyList()
@@ -77,7 +79,7 @@ fun App(
                         HomePage()
                     }
                     composable(route = "playlist_screen") {
-                        PlayLists(mediaPlayerController, navController)
+                        PlayLists(mediaPlayerController, navController, rootPicker)
                     }
                 }
             }
