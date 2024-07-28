@@ -6,7 +6,13 @@ import kotlinx.browser.window
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
+    val root = if (window.location.toString().startsWith("http://localhost")) {
+        "http://localhost:8081/"
+    } else {
+        "/"
+    }
+
     ComposeViewport(document.body!!) {
-        App(MediaPlayerController(PlatformContext(null))) { window.prompt("Enter root url") }
+        App(MediaPlayerController(PlatformContext(root))) { root }
     }
 }

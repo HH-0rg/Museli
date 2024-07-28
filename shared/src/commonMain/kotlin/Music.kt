@@ -17,6 +17,14 @@ val SongEp = "/api/song"
 @Serializable
 data class Songs(val songs: List<String>)
 
+fun joinUrls(baseUrl: String, path: String): String {
+    // Ensure there's exactly one slash between base URL and path
+    val cleanBaseUrl = baseUrl.trimEnd('/')
+    val cleanPath = path.trimStart('/')
+
+    return "$cleanBaseUrl/$cleanPath"
+}
+
 suspend fun getSongsRemote(remote: String): List<String> {
     val client = HttpClient {
         install(ContentNegotiation) {
@@ -25,7 +33,7 @@ suspend fun getSongsRemote(remote: String): List<String> {
     }
 
     return try {
-        val req = "http://${remote}${ListSongsEp}"
+        val req = joinUrls(remote, ListSongsEp)
         println(req)
         client.get(req).body<Songs>().songs
     } catch (e: Exception) {

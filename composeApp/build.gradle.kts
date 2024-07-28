@@ -11,6 +11,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+val backendUrl: String by project
+
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {

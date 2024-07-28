@@ -21,9 +21,18 @@ import io.ktor.server.plugins.cors.routing.CORS
 import kotlinx.serialization.json.Json
 import java.io.File
 
-val rootDir = "/Users/savitar/Music"
 
-fun main() {
+var rootDir = ""
+var frontendDomain = ""
+
+fun main(args: Array<String>) {
+    try {
+        rootDir = args[0]
+        frontendDomain = args[1]
+    } catch (e: Exception) {
+        println(e)
+        println("CLI Args: <rootDir> <frontendDomain>")
+    }
     embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
@@ -33,7 +42,7 @@ fun Application.module() {
         json() // Use default JSON serialization
     }
     install(CORS) {
-        anyHost()
+        allowHost(frontendDomain)
         allowMethod(HttpMethod.Get)
         allowMethod(HttpMethod.Post)
         allowHeader(HttpHeaders.ContentType)
