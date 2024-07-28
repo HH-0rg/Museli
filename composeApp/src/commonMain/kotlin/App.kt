@@ -27,9 +27,8 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 @Preview
-fun App(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Hanuman")) {
-    var navController: NavHostController = rememberNavController()
-
+fun App(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Hanuman"), mediaPlayerController: MediaPlayerController) {
+    val navController: NavHostController = rememberNavController()
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
 
@@ -40,7 +39,25 @@ fun App(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Han
                     cutoutShape = CircleShape,
                     contentPadding = PaddingValues(8.dp)
                 ) {
-                    IconButton(onClick = { navController.navigate("home_page") }) {
+                    IconButton(onClick = {
+                        navController.navigate("home_page")
+                        val song = "${androidRoot}${songsList[0]}"
+                        println(song)
+                        mediaPlayerController.prepare(song, listener = object : MediaPlayerListener {
+                            override fun onReady() {
+                                println("ready")
+                            }
+
+                            override fun onAudioCompleted() {
+                                println("audio completed")
+                            }
+
+                            override fun onError() {
+                                println("error")
+                            }
+                        })
+                        mediaPlayerController.start()
+                    }) {
                         Icon(Icons.Filled.Home, contentDescription = "Home", Modifier.background(Color.White))
                     }
                     Spacer(Modifier.weight(1f, true))

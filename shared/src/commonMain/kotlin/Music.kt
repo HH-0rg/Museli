@@ -13,7 +13,8 @@ import kotlinx.serialization.json.Json
 
 val ListSongsEp = "/api/listsongs"
 val SongEp = "/api/song"
-var testingMusicDir = "C:\\Users\\manas\\Music\\"
+val testingMusicDir = "C:\\Users\\manas\\Music\\"
+val androidRoot = "/storage/emulated/0/Music/"
 
 @Serializable
 data class Songs(val songs: List<String>)

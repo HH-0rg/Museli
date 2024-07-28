@@ -14,7 +14,9 @@ fun main(args: Array<String>) = application {
         onCloseRequest = ::exitApplication,
         title = "Museli",
     ) {
-        App(getSongs(testingMusicDir))
+        val mediaPlayerController = MediaPlayerController(PlatformContext())
+
+        App(getSongs(testingMusicDir), mediaPlayerController)
 
 //      This code allows you to get data from a server
 //        val scope = rememberCoroutineScope()

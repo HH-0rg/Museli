@@ -2,7 +2,7 @@ import android.content.Context
 import android.provider.MediaStore
 
 fun getSongs(context: Context): List<String> {
-    val folderName = "/storage/emulated/0/Music/"
+    val folderName = androidRoot
     val tempAudioList = mutableListOf<String>()
     val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     val projection = arrayOf(

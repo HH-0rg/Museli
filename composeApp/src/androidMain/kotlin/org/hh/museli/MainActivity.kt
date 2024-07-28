@@ -1,6 +1,8 @@
 package org.hh.museli
 
 import App
+import MediaPlayerController
+import PlatformContext
 import android.Manifest.permission.READ_MEDIA_AUDIO
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -35,7 +37,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            App(getSongs(this))
+            App(getSongs(this), mediaPlayerController = MediaPlayerController(PlatformContext(applicationContext)))
         }
     }
 
@@ -45,8 +47,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
-}
+//@Preview
+//@Composable
+//fun AppAndroidPreview() {
+//    App()
+//}

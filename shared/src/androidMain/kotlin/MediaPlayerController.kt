@@ -1,17 +1,18 @@
 // Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
 
+import android.net.Uri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.exoplayer.ExoPlayer
+import java.io.File
 
 actual class MediaPlayerController actual constructor(platformContext: PlatformContext) {
     val player = ExoPlayer.Builder(platformContext.applicationContext).build()
-
     actual fun prepare(pathSource: String, listener: MediaPlayerListener) {
-        val mediaItem = MediaItem.fromUri(pathSource)
+        val mediaItem = MediaItem.fromUri(Uri.fromFile(File(pathSource)))
         player.addListener(object : Player.Listener {
             override fun onPlayerError(error: PlaybackException) {
                 super.onPlayerError(error)

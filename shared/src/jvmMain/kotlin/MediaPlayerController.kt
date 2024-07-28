@@ -3,9 +3,11 @@
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.base.MediaPlayer
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
+import uk.co.caprica.vlcj.player.component.AudioPlayerComponent
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
 import java.util.Locale
+
 
 actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
     private var mediaPlayer: MediaPlayer? = null
@@ -14,13 +16,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     private fun initMediaPlayer() {
         NativeDiscovery().discover()
 
-        mediaPlayer =
-                // see https://github.com/caprica/vlcj/issues/887#issuecomment-503288294 for why we're using CallbackMediaPlayerComponent for macOS.
-            if (isMacOS()) {
-                CallbackMediaPlayerComponent()
-            } else {
-                EmbeddedMediaPlayerComponent()
-            }.mediaPlayer()
+        AudioPlayerComponent().also { mediaPlayer = it.mediaPlayer() }
 
         mediaPlayer?.events()?.addMediaPlayerEventListener(object : MediaPlayerEventAdapter() {
             override fun mediaPlayerReady(mediaPlayer: MediaPlayer?) {
@@ -44,7 +40,6 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     actual fun prepare(
         pathSource: String, listener: MediaPlayerListener
     ) {
-
         if (mediaPlayer == null) {
             initMediaPlayer()
             this.listener = listener
