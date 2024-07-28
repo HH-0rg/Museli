@@ -10,8 +10,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.semantics.Role.Companion.Image
 import io.github.vinceglb.filekit.core.FileKit
 import kotlinx.coroutines.delay
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.foundation.Image
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toArgb
+
+fun generateRandomImage(width: Int, height: Int): ImageBitmap {
+    val pixels = IntArray(width * height) {
+        Color(
+            (0..255).random(),
+            (0..255).random(),
+            (0..255).random(),
+            255
+        ).toArgb()
+    }
+
+    return ImageBitmap(width, height)
+}
+
 
 @Composable
 @Preview
@@ -78,6 +98,7 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Image(bitmap = generateRandomImage(500, 500), contentDescription = null)
             Text(text = "${mediaPlayerController.getCurrentSong()}", fontSize = 24.sp, style = MaterialTheme.typography.h6)
             Text(
                 text = "${formatDuration(currentPosition)} / ${formatDuration(mediaPlayerController.mediaDuration())}",

@@ -49,20 +49,33 @@ fun App(
                 BottomAppBar(
                     backgroundColor = Color.Black,
                     cutoutShape = CircleShape,
+                    contentColor = Color.White,
                     contentPadding = PaddingValues(8.dp)
                 ) {
                     IconButton(onClick = {
                         navController.navigate("home_page")
                     }) {
-                        Icon(Icons.Filled.Home, contentDescription = "Home", Modifier.background(Color.White))
+                        Icon(
+                            imageVector = Icons.Filled.Home,
+                            contentDescription = "Home",
+                            tint = Color.White // Ensure the icon color is white
+                        )
                     }
                     Spacer(Modifier.weight(1f, true))
-                    FloatingActionButton(onClick = { navController.navigate("music_player") }) {
-                        Icon(Icons.Filled.PlayArrow, contentDescription = "Player", Modifier.background(Color.Green))
+                    FloatingActionButton(
+                        onClick = { navController.navigate("music_player") },
+                        backgroundColor = Color.LightGray, // Custom background color
+                        contentColor = Color.White // Custom icon color
+                    ) {
+                        Icon(Icons.Filled.PlayArrow, contentDescription = "Play")
                     }
                     Spacer(Modifier.weight(1f, true))
                     IconButton(onClick = { navController.navigate("playlist_screen") }) {
-                        Icon(Icons.Filled.List, contentDescription = "Playlists", Modifier.background(Color.White))
+                        Icon(
+                            imageVector = Icons.Filled.List,
+                            contentDescription = "List",
+                            tint = Color.White // Ensure the icon color is white
+                        )
                     }
                 }
             },

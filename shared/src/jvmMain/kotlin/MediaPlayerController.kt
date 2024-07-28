@@ -40,7 +40,6 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
                 listener?.onError()
             }
         })
-
     }
 
     actual suspend fun loadPlaylists(): Map<String, List<String>> {

@@ -10,11 +10,11 @@ fun formatDuration(milliseconds: Long?): String {
     val minutes = (totalSeconds % 3600) / 60
     val seconds = totalSeconds % 60
 
-    // Format the output string
-    return when {
-//        hours > 0 -> String.format("%02d:%02d:%02d", hours, minutes, seconds)
-//        else -> String.format("%02d:%02d", minutes, seconds)
-        hours > 0 -> "$hours:$minutes:$seconds"
-        else -> "$minutes:$seconds"
+    val pad = { number: Int -> number.toString().padStart(2, '0') }
+
+    return if (hours > 0) {
+        "${pad(hours.toInt())}:${pad(minutes.toInt())}:${pad(seconds.toInt())}"
+    } else {
+        "${pad(minutes.toInt())}:${pad(seconds.toInt())}"
     }
 }
