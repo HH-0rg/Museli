@@ -73,3 +73,7 @@ You can open the project in the Fleet editor and the Run button will allow you t
 - Desktop: `./gradlew desktopRun -DmainClass=MainKt`
 - Web backend: `./gradlew :server:run --args="C:\\Users\\manas\\Music localhost:8081"`. Where first arg is your music dir and ssecond arg is host of frontend(to allow CORS)
 - Web frontend(WASM): `./gradlew wasmJsBrowserRun`
+
+#### Credits
+
+Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/ for platform-specific audio player implementation

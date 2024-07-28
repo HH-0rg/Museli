@@ -23,6 +23,10 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
 
     }
 
+    actual suspend fun loadPlaylists(): Map<String, List<String>> {
+        return getPlaylistsRemote(platformContext.rootUrl)
+    }
+
     actual fun prepare(
         song: String,
         listener: MediaPlayerListener
