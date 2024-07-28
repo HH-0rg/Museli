@@ -17,9 +17,6 @@ val SongEp = "/api/song"
 @Serializable
 data class Songs(val songs: List<String>)
 
-@Serializable
-data class SongRequest(val song: String)
-
 suspend fun getSongsRemote(remote: String): List<String> {
     val client = HttpClient {
         install(ContentNegotiation) {

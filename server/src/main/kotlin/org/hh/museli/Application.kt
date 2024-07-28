@@ -39,17 +39,26 @@ fun Application.module() {
                 contentType = ContentType.Application.Json.withCharset(Charsets.UTF_8)
             )
         }
-        post(SongEp) {
-            val songRequest = call.receive<SongRequest>()
-            val songFile = File(rootDir, songRequest.song)
+        // Route to serve a song file by filename
+        get("$SongEp/{songName}") {
+            val songName = call.parameters["songName"]
+            if (songName != null) {
+                val songFile = File(rootDir, songName)
 
-            if (songFile.exists() && songFile.isFile && songFile.parentFile.canonicalPath == File(rootDir).canonicalPath) {
-                call.respondFile(songFile)
+                if (songFile.exists() && songFile.isFile && songFile.parentFile.canonicalPath == File(rootDir).canonicalPath) {
+                    call.respondFile(songFile)
+                } else {
+                    call.respondText(
+                        text = "Error: File not found or access denied.",
+                        contentType = ContentType.Text.Plain,
+                        status = HttpStatusCode.NotFound
+                    )
+                }
             } else {
                 call.respondText(
-                    text = "Error: File not found or access denied.",
+                    text = "Error: Invalid request.",
                     contentType = ContentType.Text.Plain,
-                    status = HttpStatusCode.NotFound
+                    status = HttpStatusCode.BadRequest
                 )
             }
         }
