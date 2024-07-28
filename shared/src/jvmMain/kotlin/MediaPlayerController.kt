@@ -15,6 +15,8 @@ import java.util.Locale
 actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
     private var mediaPlayer: MediaPlayer? = null
     private var listener: MediaPlayerListener? = null
+    private val songsList: MutableList<String> = mutableListOf()
+    private var currentSongIndex: Int? = null
 
     private fun initMediaPlayer() {
         NativeDiscovery().discover()
@@ -45,7 +47,11 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     }
 
     actual suspend fun loadSongList(): List<String> {
-        return getSongs(platformContext.rootDir)
+        var tempSongsList = getSongs(platformContext.rootDir)
+        songsList.clear()
+        songsList.addAll(tempSongsList)
+        currentSongIndex = if (songsList.isNotEmpty()) 0 else null
+        return songsList
     }
 
     actual fun prepare(
@@ -92,8 +98,26 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         mediaPlayer?.controls()?.setTime(time)
     }
 
+    actual fun nextTrack() {
+        if (songsList.isNotEmpty() && currentSongIndex != null) {
+            currentSongIndex = (currentSongIndex!! + 1) % songsList.size
+        }
+    }
 
+    actual fun previousTrack() {
+        if (songsList.isNotEmpty() && currentSongIndex != null) {
+            currentSongIndex = (currentSongIndex!! - 1 + songsList.size) % songsList.size
+        }
+    }
 
+    actual fun getCurrentSong(): String? {
+        return currentSongIndex?.let { songsList[it] }
+    }
+
+    actual fun setCurrentSongIdx(idx: Int) {
+        currentSongIndex = idx
+    }
+    
     actual fun release() {
         mediaPlayer?.release()
     }
