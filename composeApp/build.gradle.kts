@@ -56,6 +56,8 @@ kotlin {
 
             implementation(libs.androidx.navigation.compose)
             implementation(libs.filekit.compose)
+            implementation(libs.androidx.material.icons.extended)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

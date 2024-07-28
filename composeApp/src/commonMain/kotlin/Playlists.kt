@@ -1,20 +1,37 @@
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavHostController
+import io.github.vinceglb.filekit.core.FileKit
 
 
 @Composable
 @Preview
-fun PlayLists(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Hanuman")) {
-    return Scaffold {
+fun PlayLists(mediaPlayerController: MediaPlayerController, navController: NavHostController) {
+    var songsList by remember { mutableStateOf(emptyList<String>()) }
+    var rootDir by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+        rootDir = FileKit.pickDirectory()?.path
+        rootDir?.let {
+            mediaPlayerController.setRoot(it)
+            val loadedSongs = mediaPlayerController.loadSongList()
+            songsList = loadedSongs
+        }
+    }
+
+    return Scaffold(backgroundColor = Color.Black) {
         Column {
-            Text("Songs in the playlist")
+            Text("Songs in the playlist", color = Color.White)
             LazyColumn {
                 items(songsList.size) { song ->
-                    Text(songsList[song])
+                    TextButton(onClick = { navController.navigate("music_player/${songsList[song]}") }) {
+                        Text(songsList[song], color = Color.White)
+                    }
                 }
             }
         }
