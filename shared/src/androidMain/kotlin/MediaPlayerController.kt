@@ -1,6 +1,7 @@
 // Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
 
 import android.net.Uri
+import android.provider.MediaStore
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -9,10 +10,52 @@ import androidx.media3.common.Player.STATE_READY
 import androidx.media3.exoplayer.ExoPlayer
 import java.io.File
 
-actual class MediaPlayerController actual constructor(platformContext: PlatformContext) {
+actual class MediaPlayerController actual constructor(private val platformContext: PlatformContext) {
     val player = ExoPlayer.Builder(platformContext.applicationContext).build()
-    actual fun prepare(pathSource: String, listener: MediaPlayerListener) {
-        val mediaItem = MediaItem.fromUri(Uri.fromFile(File(pathSource)))
+
+    private val songMap: MutableMap<String, String> = mutableMapOf()
+
+    actual suspend fun loadSongList(): List<String> {
+        val safeRootDir = platformContext.rootDir ?: return emptyList() // Handle null case if necessary
+        val folderName = safeRootDir.substringAfter(":") // Gets the path after 'primary:'
+        val queryUri = when {
+            safeRootDir.startsWith("/tree/primary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            safeRootDir.startsWith("/tree/secondary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Adjust as needed for secondary storage
+            else -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Default URI
+        }
+
+        val tempAudioList = mutableListOf<String>()
+        val projection = arrayOf(
+            MediaStore.Audio.AudioColumns.DATA,
+            MediaStore.Audio.AudioColumns.RELATIVE_PATH,
+            // Not using these, but maybe they'll be useful later
+            MediaStore.Audio.AudioColumns.ALBUM,
+            MediaStore.Audio.ArtistColumns.ARTIST
+        )
+        val selection = "${MediaStore.Audio.Media.RELATIVE_PATH} LIKE ? AND ${MediaStore.Audio.Media.RELATIVE_PATH } NOT LIKE ?"
+        val selectionArgs = arrayOf(
+            "$folderName/%",  // Include only files in the specific folder
+            "$folderName/%/%" // Exclude files in subdirectories
+        )
+        val cursor = platformContext.applicationContext.contentResolver.query(queryUri, projection, selection, selectionArgs, null)
+
+        cursor?.use {
+            while (it.moveToNext()) {
+                val path = it.getString(0)
+                val name = path.substringAfterLast("/")
+                songMap[name] = path // Populate the map
+                tempAudioList.add(name)
+            }
+        }
+
+        return tempAudioList
+    }
+    actual fun setRoot(newRoot: String) {
+        platformContext.rootDir = newRoot
+    }
+    actual fun prepare(song: String, listener: MediaPlayerListener) {
+
+        val mediaItem = songMap[song]?.let { MediaItem.fromUri(Uri.fromFile(File(it))) }
         player.addListener(object : Player.Listener {
             override fun onPlayerError(error: PlaybackException) {
                 super.onPlayerError(error)
@@ -32,9 +75,11 @@ actual class MediaPlayerController actual constructor(platformContext: PlatformC
                 listener.onError()
             }
         })
-        player.setMediaItem(mediaItem)
-        player.prepare()
-        player.play()
+        if (mediaItem != null) {
+            player.setMediaItem(mediaItem)
+            player.prepare()
+            player.play()
+        }
     }
 
     actual fun start() {

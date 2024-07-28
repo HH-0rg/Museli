@@ -13,7 +13,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
-import getSongs
+import androidx.lifecycle.lifecycleScope
+import io.github.vinceglb.filekit.core.FileKit
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -36,8 +38,12 @@ class MainActivity : ComponentActivity() {
             requestPermissionLauncher.launch(READ_MEDIA_AUDIO)
         }
 
-        setContent {
-            App(getSongs(this), mediaPlayerController = MediaPlayerController(PlatformContext(applicationContext)))
+        lifecycleScope.launch {
+            FileKit.init(this@MainActivity)
+
+            setContent {
+                App(mediaPlayerController = MediaPlayerController(PlatformContext(applicationContext, null)))
+            }
         }
     }
 

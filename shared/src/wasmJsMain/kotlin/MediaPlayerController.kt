@@ -6,11 +6,17 @@ import org.w3c.dom.HTMLAudioElement
 actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
     private val audioElement = document.createElement("audio") as HTMLAudioElement
 
+    actual fun setRoot(newRoot: String) {
+        // TODO
+    }
+    actual suspend fun loadSongList(): List<String> {
+        return getSongsRemote(platformContext.rootUrl)
+    }
     actual fun prepare(
-        pathSource: String,
+        song: String,
         listener: MediaPlayerListener
     ) {
-        audioElement.src = pathSource
+        audioElement.src = song
         audioElement.addEventListener("canplaythrough", {
             // Audio is ready to play without interruption
             listener.onReady()

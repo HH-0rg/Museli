@@ -55,6 +55,7 @@ kotlin {
             implementation(projects.shared)
 
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.filekit.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

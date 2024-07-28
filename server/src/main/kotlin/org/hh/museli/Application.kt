@@ -2,7 +2,6 @@ package org.hh.museli
 
 import SERVER_PORT
 import Songs
-import getSongs
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -13,13 +12,15 @@ import io.ktor.serialization.kotlinx.json.*
 import ListSongsEp
 import SongEp
 import SongRequest
+import getSongs
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
 import io.ktor.server.request.receive
 import kotlinx.serialization.json.Json
-import testingMusicDir
 import java.io.File
+
+val rootDir = "C:\\Users\\manas\\Music"
 
 fun main() {
     embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
@@ -34,15 +35,15 @@ fun Application.module() {
     routing {
         get(ListSongsEp) {
             call.respondText(
-                text = Json.encodeToString(Songs.serializer(), Songs(getSongs(testingMusicDir))),
+                text = Json.encodeToString(Songs.serializer(), Songs(getSongs(rootDir))),
                 contentType = ContentType.Application.Json.withCharset(Charsets.UTF_8)
             )
         }
         post(SongEp) {
             val songRequest = call.receive<SongRequest>()
-            val songFile = File(testingMusicDir, songRequest.song)
+            val songFile = File(rootDir, songRequest.song)
 
-            if (songFile.exists() && songFile.isFile && songFile.parentFile.canonicalPath == File(testingMusicDir).canonicalPath) {
+            if (songFile.exists() && songFile.isFile && songFile.parentFile.canonicalPath == File(rootDir).canonicalPath) {
                 call.respondFile(songFile)
             } else {
                 call.respondText(

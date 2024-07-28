@@ -23,12 +23,42 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-
+import io.github.vinceglb.filekit.core.FileKit
 
 @Composable
 @Preview
-fun App(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Hanuman"), mediaPlayerController: MediaPlayerController) {
+fun App(
+    mediaPlayerController: MediaPlayerController
+) {
+    var songsList: List<String> = emptyList()
+    var rootDir_: String? = null
     val navController: NavHostController = rememberNavController()
+    LaunchedEffect(Unit) {
+        rootDir_ = FileKit.pickDirectory()?.path
+        rootDir_?.let {
+            mediaPlayerController.setRoot(it)
+            songsList = mediaPlayerController.loadSongList()
+            for (song in songsList) {
+                println(song)
+            }
+            val song = songsList[0]
+            println(song)
+            mediaPlayerController.prepare(song, listener = object : MediaPlayerListener {
+                override fun onReady() {
+                    println("ready")
+                }
+
+                override fun onAudioCompleted() {
+                    println("audio completed")
+                }
+
+                override fun onError() {
+                    println("error")
+                }
+            })
+            mediaPlayerController.start()
+        }
+    }
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
 
@@ -41,22 +71,6 @@ fun App(songsList: List<String> = listOf("Superman", "batman", "Shaktiman", "Han
                 ) {
                     IconButton(onClick = {
                         navController.navigate("home_page")
-                        val song = "${androidRoot}${songsList[0]}"
-                        println(song)
-                        mediaPlayerController.prepare(song, listener = object : MediaPlayerListener {
-                            override fun onReady() {
-                                println("ready")
-                            }
-
-                            override fun onAudioCompleted() {
-                                println("audio completed")
-                            }
-
-                            override fun onError() {
-                                println("error")
-                            }
-                        })
-                        mediaPlayerController.start()
                     }) {
                         Icon(Icons.Filled.Home, contentDescription = "Home", Modifier.background(Color.White))
                     }

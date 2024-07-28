@@ -6,6 +6,7 @@ import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
 import uk.co.caprica.vlcj.player.component.AudioPlayerComponent
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
+import java.nio.file.Paths
 import java.util.Locale
 
 
@@ -37,9 +38,18 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
 
     }
 
+    actual fun setRoot(newRoot: String) {
+        platformContext.rootDir = newRoot
+    }
+
+    actual suspend fun loadSongList(): List<String> {
+        return getSongs(platformContext.rootDir)
+    }
+
     actual fun prepare(
-        pathSource: String, listener: MediaPlayerListener
+        song: String, listener: MediaPlayerListener
     ) {
+        val fullPath = platformContext.rootDir?.let { "${it}/${song}" }
         if (mediaPlayer == null) {
             initMediaPlayer()
             this.listener = listener
@@ -50,7 +60,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         }
 
 
-        mediaPlayer?.media()?.play(pathSource)
+        mediaPlayer?.media()?.play(fullPath)
     }
 
     actual fun start() {
