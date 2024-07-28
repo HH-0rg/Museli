@@ -4,7 +4,7 @@ A stateless simple music application that supports android, windows, linux and w
 
 #### The problem
 
-There are many people(like me!) who like to own their music, not relying on modern streaming services. Apart from the recommendation engines, a big selling point is the syncing capibilities they offer. This is __relatively__ easy to achieve in a closed ecosystem. Museli is an attempt to provide a similar syncing experience but taking advantage of widely available and mature mechanisms.
+There are many people(like me!) who like to own their music, not relying on modern streaming services. Apart from the recommendation engines, a big selling point is the syncing capibilities they offer. This is __relatively__ easy to achieve in a closed ecosystem. Museli is an attempt to provide a similar syncing experience with music libraries but taking advantage of widely available and mature mechanisms, while giving the user full ownership of their media.
 
 #### What makes Museli different?
 
