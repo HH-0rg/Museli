@@ -7,16 +7,16 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     private val audioElement = document.createElement("audio") as HTMLAudioElement
 
     actual fun setRoot(newRoot: String) {
-        // TODO
+        platformContext.rootUrl = newRoot
     }
     actual suspend fun loadSongList(): List<String> {
-        return getSongsRemote(platformContext.rootUrl)
+        return platformContext.rootUrl?.let { getSongsRemote(it) } ?: emptyList()
     }
     actual fun prepare(
         song: String,
         listener: MediaPlayerListener
     ) {
-        audioElement.src = song
+        audioElement.src = "http://${platformContext.rootUrl}/${SongEp}/${song}"
         audioElement.addEventListener("canplaythrough", {
             // Audio is ready to play without interruption
             listener.onReady()

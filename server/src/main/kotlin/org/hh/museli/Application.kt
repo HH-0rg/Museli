@@ -11,12 +11,13 @@ import io.ktor.server.routing.*
 import io.ktor.serialization.kotlinx.json.*
 import ListSongsEp
 import SongEp
-import SongRequest
 import getSongs
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
-import io.ktor.server.request.receive
+import io.ktor.server.plugins.cors.routing.CORS
 import kotlinx.serialization.json.Json
 import java.io.File
 
@@ -30,6 +31,13 @@ fun main() {
 fun Application.module() {
     install(ContentNegotiation) {
         json() // Use default JSON serialization
+    }
+    install(CORS) {
+        anyHost()
+        allowMethod(HttpMethod.Get)
+        allowMethod(HttpMethod.Post)
+        allowHeader(HttpHeaders.ContentType)
+        allowHeader(HttpHeaders.Authorization)
     }
 
     routing {

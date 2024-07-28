@@ -11,12 +11,16 @@ import io.github.vinceglb.filekit.core.FileKit
 
 @Composable
 @Preview
-fun PlayLists(mediaPlayerController: MediaPlayerController, navController: NavHostController) {
+fun PlayLists(
+    mediaPlayerController: MediaPlayerController,
+    navController: NavHostController,
+    rootPicker: suspend () -> String?
+) {
     var songsList by remember { mutableStateOf(emptyList<String>()) }
     var rootDir by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
-        rootDir = FileKit.pickDirectory()?.path
+        rootDir = rootPicker()
         rootDir?.let {
             mediaPlayerController.setRoot(it)
             val loadedSongs = mediaPlayerController.loadSongList()

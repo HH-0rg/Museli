@@ -45,6 +45,7 @@ ktor-serialization-kotlinx-json = { module= "io.ktor:ktor-serialization-kotlinx-
 ktor-client-serialization = { module= "io.ktor:ktor-client-serialization", version.ref = "ktor" }
 ktor-server-content-negotiation = { module= "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 ktor-client-content-negotiation = { module= "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-server-cors = { module= "io.ktor:ktor-server-cors", version.ref = "ktor" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 # temporary
 kotlinx-coroutines-swing = { module="org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
@@ -52,7 +53,7 @@ androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navi
 vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcj" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 filekit-compose = {module = "io.github.vinceglb:filekit-compose", version.ref = "filekit" }
-androidx-material-icons-extended = {  group = "androidx.compose.material", name = "material-icons-extended", version.ref = "icon-extended"}
+material-icons-extended-wasm-js = {  group = "org.jetbrains.compose.material", name = "material-icons-extended", version.ref = "icon-extended"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

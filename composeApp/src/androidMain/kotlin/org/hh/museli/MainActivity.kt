@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
             FileKit.init(this@MainActivity)
 
             setContent {
-                App(mediaPlayerController = MediaPlayerController(PlatformContext(applicationContext, null)))
+                App(mediaPlayerController = MediaPlayerController(PlatformContext(applicationContext, null))) { FileKit.pickDirectory()?.path }
             }
         }
     }

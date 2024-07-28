@@ -25,7 +25,9 @@ suspend fun getSongsRemote(remote: String): List<String> {
     }
 
     return try {
-        client.get("${remote}${ListSongsEp}").body<Songs>().songs
+        val req = "http://${remote}${ListSongsEp}"
+        println(req)
+        client.get(req).body<Songs>().songs
     } catch (e: Exception) {
         println("Error fetching songs: ${e.message}")
         emptyList()
