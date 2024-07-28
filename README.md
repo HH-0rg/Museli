@@ -31,7 +31,7 @@ Museli is an(almost) completely stateless music player, ie it doesn't store any 
 ```
 All music files are present directly inside the directory. A playlist is represented by a directory and contains symlinks back to the root library directory. So here we have a playlist `Ado` represented by the `./Ado` dir and all files inside it are symlinks.
 
-Museli is writt0nd in the Kotlin Multiplatform Programming framework and Jetpack Compose for KMP, which allows us to share code(both UI and business logic) between all the platforms Museli supports. Though hard to set-up initially, it is very easy to maintain. It allows us to do things like splitting the desktop application code into webapp+frontend with the help of minimal wrappers around the existing desktop code. This otherwise require considerable effort to architect and code.
+Museli is written in the Kotlin Multiplatform Programming framework and Jetpack Compose for KMP, which allows us to share code(both UI and business logic) between all the platforms Museli supports. Though hard to set-up initially, it is very easy to maintain. It allows us to do things like splitting the desktop application code into webapp+frontend with the help of minimal wrappers around the existing desktop code. This otherwise require considerable effort to architect and code.
 
 #### So what??? I don't see why we need yet another music player...
 
