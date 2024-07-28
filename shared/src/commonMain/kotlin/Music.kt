@@ -25,6 +25,14 @@ fun joinUrls(baseUrl: String, path: String): String {
     return "$cleanBaseUrl/$cleanPath"
 }
 
+suspend fun getPlaylists(): Map<String, List<String>> {
+    return mapOf(
+        "greetings" to listOf("Hello", "Hi", "Hey"),
+        "farewells" to listOf("Goodbye", "Bye", "See you"),
+        "languages" to listOf("Kotlin", "Java", "Swift")
+    )
+}
+
 suspend fun getSongsRemote(remote: String): List<String> {
     val client = HttpClient {
         install(ContentNegotiation) {
