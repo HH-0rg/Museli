@@ -1,3 +1,4 @@
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import io.github.vinceglb.filekit.core.FileKit
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
@@ -24,6 +26,54 @@ import androidx.navigation.NavController
 
 
 @Composable
+fun ExpandableSection(
+    directory: String,
+    songs: List<String>,
+    navController: NavHostController,
+    mediaPlayerController: MediaPlayerController,
+    songsList: List<String>
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+    var height = if (isExpanded) 300.dp else 70.dp
+
+    Column(
+        modifier = Modifier
+            .height(height)
+            .padding(16.dp),
+    ) {
+        Text(
+            text = directory,
+            color = Color.White,
+            fontSize = 20.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Gray.copy(alpha = 0.1f))
+                .padding(8.dp)
+                .clickable { isExpanded = !isExpanded
+                }
+        )
+
+        if (isExpanded) {
+            LazyColumn {
+                itemsIndexed(songs) { idx, song ->
+                    Text(text = if (song.length > 50) "* ${song.take(50)}..." else "* ${song}",
+                        color = Color.White,
+                        modifier = Modifier
+                            .clickable {
+                                mediaPlayerController.setCurrentSongIdx(songsList.indexOf(song))
+                                navController.navigate("music_player")
+                            }
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 @Preview
 fun PlayLists(
     mediaPlayerController: MediaPlayerController,
@@ -31,6 +81,7 @@ fun PlayLists(
     rootPicker: suspend () -> String?
 ) {
     var songsList by remember { mutableStateOf(emptyList<String>()) }
+    var playlists by remember { mutableStateOf<Map<String, List<String>>>(emptyMap()) }
     var rootDir by remember { mutableStateOf<String?>(GlobalState.rootDirectory) }
 
     LaunchedEffect(Unit) {
@@ -42,36 +93,16 @@ fun PlayLists(
             }
         }
         val loadedSongs = mediaPlayerController.loadSongList()
-        for ((directory, songs) in mediaPlayerController.loadPlaylists()) {
-            println("Directory: $directory")
-            for (song in songs) {
-                println("  Song: $song")
-            }
-        }
+        playlists = mediaPlayerController.loadPlaylists()
         songsList = loadedSongs
     }
 
-//    return Scaffold(backgroundColor = Color.Black) {
-//        Column {
-//            Text("Songs in the playlist", color = Color.White)
-//            LazyColumn {
-//                items(songsList.size) { song ->
-//                    TextButton(onClick = {
-//                        mediaPlayerController.setCurrentSongIdx(song)
-//                        navController.navigate("music_player")
-//                    }) {
-//                        Text(songsList[song], color = Color.White)
-//                    }
-//                }
-//            }
-//        }
-//    }
     return Scaffold(
         backgroundColor = Color.Black
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize().height(500.dp)
                 .padding(16.dp),
         ) {
             Text(
@@ -80,6 +111,12 @@ fun PlayLists(
                 style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
             )
             Spacer(modifier = Modifier.height(8.dp))
+
+            LazyColumn {
+                items(playlists.entries.toList()) { (directory, songs) ->
+                    ExpandableSection(directory = directory, songs = songs, navController, mediaPlayerController, songsList)
+                }
+            }
             LazyColumn {
                 items(songsList.size) { song ->
                     Text(text = if (songsList[song].length > 50) "* ${songsList[song].take(50)}..." else "* ${songsList[song]}",

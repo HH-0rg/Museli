@@ -98,7 +98,6 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(bitmap = generateRandomImage(500, 500), contentDescription = null)
             Text(text = "${mediaPlayerController.getCurrentSong()}", fontSize = 24.sp, style = MaterialTheme.typography.h6)
             Text(
                 text = "${formatDuration(currentPosition)} / ${formatDuration(mediaPlayerController.mediaDuration())}",

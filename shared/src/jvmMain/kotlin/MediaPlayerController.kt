@@ -43,6 +43,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     }
 
     actual suspend fun loadPlaylists(): Map<String, List<String>> {
+        var songs = getPlaylists(platformContext.rootDir)
         return getPlaylists(platformContext.rootDir)
     }
 
