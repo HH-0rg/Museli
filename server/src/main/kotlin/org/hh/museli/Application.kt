@@ -42,7 +42,7 @@ fun Application.module() {
         json() // Use default JSON serialization
     }
     install(CORS) {
-        allowHost(frontendDomain)
+        anyHost()
         allowMethod(HttpMethod.Get)
         allowMethod(HttpMethod.Post)
         allowHeader(HttpHeaders.ContentType)

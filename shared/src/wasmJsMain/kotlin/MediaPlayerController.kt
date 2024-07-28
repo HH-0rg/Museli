@@ -5,14 +5,24 @@ import org.w3c.dom.HTMLAudioElement
 
 actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
     private val audioElement = document.createElement("audio") as HTMLAudioElement
+    private val songsList: MutableList<String> = mutableListOf()
+    private var currentSongIndex: Int? = null
 
     actual fun setRoot(newRoot: String) {
         // We don't want to change root
         // platformContext.rootUrl = newRoot
     }
+
     actual suspend fun loadSongList(): List<String> {
-        return getSongsRemote(platformContext.rootUrl)
+
+        var tempSongsList = getSongsRemote(platformContext.rootUrl)
+        songsList.clear()
+        songsList.addAll(tempSongsList)
+        currentSongIndex = if (songsList.isNotEmpty()) 0 else null
+        return songsList
+
     }
+
     actual fun prepare(
         song: String,
         listener: MediaPlayerListener
@@ -62,6 +72,26 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     }
 
     actual fun release() {
+    }
+
+    actual fun nextTrack() {
+        if (songsList.isNotEmpty() && currentSongIndex != null) {
+            currentSongIndex = (currentSongIndex!! + 1) % songsList.size
+        }
+    }
+
+    actual fun previousTrack() {
+        if (songsList.isNotEmpty() && currentSongIndex != null) {
+            currentSongIndex = (currentSongIndex!! - 1 + songsList.size) % songsList.size
+        }
+    }
+
+    actual fun getCurrentSong(): String? {
+        return currentSongIndex?.let { songsList[it] }
+    }
+
+    actual fun setCurrentSongIdx(idx: Int) {
+        currentSongIndex = idx
     }
 
 }
