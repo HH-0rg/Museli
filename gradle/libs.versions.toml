@@ -23,6 +23,7 @@ media3="1.3.0"
 filekit="0.7.0"
 
 icon-extended="1.6.0"
+media3Common = "1.3.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

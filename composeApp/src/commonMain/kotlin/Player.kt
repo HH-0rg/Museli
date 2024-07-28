@@ -47,7 +47,7 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
             mediaPlayerController.start()
         }
     }
-    println(mediaPlayerController.isPlaying())
+    println(mediaPlayerController.seek())
 
     Scaffold(backgroundColor = Color.White) {
         Column(
@@ -57,10 +57,10 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Sample Track Title", fontSize = 24.sp, style = MaterialTheme.typography.h6)
+            Text(text = "$song", fontSize = 24.sp, style = MaterialTheme.typography.h6)
+            Text(text = "${mediaPlayerController.seek()}", fontSize = 24.sp, style = MaterialTheme.typography.h6)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Sample Artist", fontSize = 18.sp, style = MaterialTheme.typography.body1)
-            Spacer(modifier = Modifier.height(16.dp))
+            Text("${mediaPlayerController.mediaDuration()}")
             Slider(
                 value = currentPosition,
                 onValueChange = {
@@ -92,7 +92,7 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController, song: String?) {
                         contentDescription = if (isShuffling) "Shuffle On" else "Shuffle Off"
                     )
                 }
-                IconButton(onClick = {}) {
+                IconButton(onClick = {mediaPlayerController.setTime(30000)}) {
                     Icon(
                         imageVector = if (isRepeating) Icons.Filled.RepeatOne else Icons.Filled.Repeat,
                         contentDescription = if (isRepeating) "Repeat One" else "Repeat"

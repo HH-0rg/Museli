@@ -1,5 +1,4 @@
 // Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
-
 expect class MediaPlayerController(platformContext: PlatformContext) {
     suspend fun loadSongList(): List<String>
     fun setRoot(newRoot: String)
@@ -14,6 +13,12 @@ expect class MediaPlayerController(platformContext: PlatformContext) {
     fun isPlaying(): Boolean
 
     fun release()
+
+    fun seek(): Long?
+
+    fun mediaDuration(): Long?
+
+    fun setTime(time: Long)
 }
 
 expect class PlatformContext

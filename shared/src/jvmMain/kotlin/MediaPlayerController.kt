@@ -3,10 +3,12 @@
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.base.MediaPlayer
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
+import uk.co.caprica.vlcj.player.base.State
 import uk.co.caprica.vlcj.player.component.AudioPlayerComponent
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
 import java.nio.file.Paths
+import java.sql.Time
 import java.util.Locale
 
 
@@ -59,7 +61,6 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
             mediaPlayer?.controls()?.stop()
         }
 
-
         mediaPlayer?.media()?.play(fullPath)
     }
 
@@ -78,6 +79,20 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
     actual fun isPlaying(): Boolean {
         return mediaPlayer?.status()?.isPlaying ?: false
     }
+
+    actual fun seek(): Long? {
+        return mediaPlayer?.status()?.time()
+    }
+
+    actual fun mediaDuration(): Long? {
+        return mediaPlayer?.status()?.length()
+    }
+
+    actual fun setTime(time: Long) {
+        mediaPlayer?.controls()?.setTime(time)
+    }
+
+
 
     actual fun release() {
         mediaPlayer?.release()

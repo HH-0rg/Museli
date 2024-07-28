@@ -99,6 +99,18 @@ actual class MediaPlayerController actual constructor(private val platformContex
         player.release()
     }
 
+    actual fun seek(): Long? {
+        return  player.currentPosition
+    }
+
+    actual fun mediaDuration(): Long? {
+        return player.contentDuration
+    }
+
+    actual fun setTime(time: Long) {
+        player.seekTo(time)
+    }
+
     actual fun isPlaying(): Boolean {
         return player.isPlaying
     }
