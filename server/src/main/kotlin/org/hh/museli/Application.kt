@@ -24,23 +24,21 @@ import io.ktor.server.plugins.cors.routing.CORS
 import kotlinx.serialization.json.Json
 import java.io.File
 
-
-var rootDir = ""
-var frontendDomain = ""
-
 fun main(args: Array<String>) {
-    try {
-        rootDir = args[0]
-        frontendDomain = args[1]
-    } catch (e: Exception) {
-        println(e)
-        println("CLI Args: <rootDir> <frontendDomain>")
+    if (args.size < 2) {
+        println("Usage: <rootDir> <frontendDomain>")
+        return
     }
-    embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
+    embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = { module(args) })
         .start(wait = true)
 }
+fun Application.module(args: Array<String>) {
+    val rootDir = args[0]
+    val frontendDomain = args[1]
 
-fun Application.module() {
+    println("Inside module")
+    println(rootDir)
+    println(frontendDomain)
     install(ContentNegotiation) {
         json() // Use default JSON serialization
     }
