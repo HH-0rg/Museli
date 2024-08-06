@@ -2,4 +2,4 @@
 
 import android.content.Context
 
-actual class PlatformContext(val applicationContext: Context, var rootDir: String?)
+actual class PlatformContext(val applicationContext: Context)

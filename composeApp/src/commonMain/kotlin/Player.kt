@@ -35,7 +35,10 @@ fun generateRandomImage(width: Int, height: Int): ImageBitmap {
 
 @Composable
 @Preview
-fun MusicPlayer(mediaPlayerController: MediaPlayerController) {
+fun MusicPlayer(
+    mediaPlayerController: MediaPlayerController,
+    library: Library
+) {
 
     var songsList: List<String> = emptyList()
     var rootDir_: String? = null
@@ -49,12 +52,12 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController) {
     var currentPosition: Long by remember { mutableStateOf(0) }
 
     fun prepareMedia() {
-        if (mediaPlayerController.getCurrentSong() == null) {
+        if (library.getCurrentSong() == null) {
             println("No song to play")
         } else {
 
             mediaPlayerController.prepare(
-                mediaPlayerController.getCurrentSong()!!,
+                library.getCurrentSong()!!,
                 listener = object : MediaPlayerListener {
                     override fun onReady() {
                         println("ready")
@@ -98,7 +101,7 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "${mediaPlayerController.getCurrentSong()}", fontSize = 24.sp, style = MaterialTheme.typography.h6)
+            Text(text = "${library.getCurrentSong()}", fontSize = 24.sp, style = MaterialTheme.typography.h6)
             Text(
                 text = "${formatDuration(currentPosition)} / ${formatDuration(mediaPlayerController.mediaDuration())}",
                 fontSize = 24.sp,
@@ -130,7 +133,7 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController) {
                     )
                 }
                 IconButton(onClick = {
-                    mediaPlayerController.previousTrack()
+                    library.previousTrack()
                     prepareMedia()
                 }) {
                     Icon(imageVector = Icons.Filled.SkipPrevious, contentDescription = "Previous")
@@ -142,7 +145,7 @@ fun MusicPlayer(mediaPlayerController: MediaPlayerController) {
                     )
                 }
                 IconButton(onClick = {
-                    mediaPlayerController.nextTrack()
+                    library.nextTrack()
                     prepareMedia()
                 }) {
                     Icon(imageVector = Icons.Filled.SkipNext, contentDescription = "Next")
