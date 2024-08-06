@@ -1,31 +1,11 @@
-// Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
-
-import android.net.Uri
-import android.provider.DocumentsContract
+import android.content.Context
 import android.provider.MediaStore
-import androidx.documentfile.provider.DocumentFile
-import androidx.media3.common.MediaItem
-import androidx.media3.common.PlaybackException
-import androidx.media3.common.Player
-import androidx.media3.common.Player.STATE_ENDED
-import androidx.media3.common.Player.STATE_READY
-import androidx.media3.exoplayer.ExoPlayer
-import java.io.File
 
-actual class MediaPlayerController actual constructor(private val platformContext: PlatformContext) {
-    val player = ExoPlayer.Builder(platformContext.applicationContext).build()
-
-    private val songMap: MutableMap<String, String> = mutableMapOf()
+class AndroidLibrary(private val rootDir: String, val applicationContext: Context): Library {
     private val songsList: MutableList<String> = mutableListOf()
     private var currentSongIndex: Int? = null
-
-    fun getFileFromTreeUri(uri: Uri): DocumentFile? {
-        val docFile = DocumentFile.fromTreeUri(platformContext.applicationContext, uri)
-        return docFile
-    }
-
-    actual suspend fun loadSongList(): List<String> {
-        val safeRootDir = platformContext.rootDir ?: return emptyList() // Handle null case if necessary
+    override suspend fun getSongs(): List<String> {
+        val safeRootDir = rootDir ?: return emptyList() // Handle null case if necessary
         val folderName = safeRootDir.substringAfter(":") // Gets the path after 'primary:'
         val queryUri = when {
             safeRootDir.startsWith("/tree/primary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -46,14 +26,13 @@ actual class MediaPlayerController actual constructor(private val platformContex
             "$folderName/%",  // Include only files in the specific folder
             "$folderName/%/%" // Exclude files in subdirectories
         )
-        val cursor = platformContext.applicationContext.contentResolver.query(queryUri, projection, selection, selectionArgs, null)
+        val cursor = applicationContext.contentResolver.query(queryUri, projection, selection, selectionArgs, null)
 
         cursor?.use {
             while (it.moveToNext()) {
                 val path = it.getString(0)
                 val name = path.substringAfterLast("/")
-                songMap[name] = path // Populate the map
-                tempAudioList.add(name)
+                tempAudioList.add(path)
             }
         }
 
@@ -63,39 +42,7 @@ actual class MediaPlayerController actual constructor(private val platformContex
         currentSongIndex = if (songsList.isNotEmpty()) 0 else null
         return songsList
     }
-    actual fun setRoot(newRoot: String) {
-        platformContext.rootDir = newRoot
-    }
-    actual fun prepare(song: String, listener: MediaPlayerListener) {
-
-        val mediaItem = songMap[song]?.let { MediaItem.fromUri(Uri.fromFile(File(it))) }
-        player.addListener(object : Player.Listener {
-            override fun onPlayerError(error: PlaybackException) {
-                super.onPlayerError(error)
-                listener.onError()
-            }
-
-            override fun onPlaybackStateChanged(playbackState: Int) {
-                super.onPlaybackStateChanged(playbackState)
-                when (playbackState) {
-                    STATE_READY -> listener.onReady()
-                    STATE_ENDED -> listener.onAudioCompleted()
-                }
-            }
-
-            override fun onPlayerErrorChanged(error: PlaybackException?) {
-                super.onPlayerErrorChanged(error)
-                listener.onError()
-            }
-        })
-        if (mediaItem != null) {
-            player.setMediaItem(mediaItem)
-            player.prepare()
-            player.play()
-        }
-    }
-
-    actual suspend fun loadPlaylists(): Map<String, List<String>> {
+    override suspend fun getPlaylists(): Map<String, List<String>> {
 //        val safeRootDir = platformContext.rootDir ?: return emptyMap() // Handle null case if necessary
 //        val folderName = safeRootDir.substringAfter(":") // Gets the path after 'primary:'
 //        val queryUri = when {
@@ -174,66 +121,23 @@ actual class MediaPlayerController actual constructor(private val platformContex
             )
         )
     }
-
-    actual fun start() {
-        player.play()
-    }
-
-    actual fun pause() {
-        if (player.isPlaying)
-            player.pause()
-    }
-
-    actual fun stop() {
-        player.stop()
-    }
-
-    actual fun release() {
-        player.release()
-    }
-
-    actual fun seek(): Long? {
-        println(player.currentPosition)
-        println(player.duration)
-        println(player.contentDuration)
-        println(player.contentPosition)
-        println(player.currentMediaItem)
-        println("player.currentMediaItem")
-
-
-        return  player.contentPosition
-    }
-
-    actual fun mediaDuration(): Long? {
-        return player.duration
-    }
-
-    actual fun setTime(time: Long) {
-        player.seekTo(time)
-    }
-
-    actual fun isPlaying(): Boolean {
-        return player.isPlaying
-    }
-
-    actual fun nextTrack() {
+    override fun nextTrack() {
         if (songsList.isNotEmpty() && currentSongIndex != null) {
             currentSongIndex = (currentSongIndex!! + 1) % songsList.size
         }
     }
 
-    actual fun previousTrack() {
+    override fun previousTrack() {
         if (songsList.isNotEmpty() && currentSongIndex != null) {
             currentSongIndex = (currentSongIndex!! - 1 + songsList.size) % songsList.size
         }
     }
 
-    actual fun getCurrentSong(): String? {
+    override fun getCurrentSong(): String? {
         return currentSongIndex?.let { songsList[it] }
     }
 
-    actual fun setCurrentSongIdx(idx: Int) {
+    override fun setCurrentSongIdx(idx: Int) {
         currentSongIndex = idx
     }
 }
-

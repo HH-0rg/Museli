@@ -13,7 +13,7 @@ fun getSongs(rootDir: String?): List<String> {
     return if (directory.isDirectory) {
         println(directory.listFiles())
         directory.listFiles { file -> file.isFile && file.extension in SongExtensions}
-            ?.map { it.name } ?: emptyList()
+            ?.map { it.absolutePath } ?: emptyList()
     } else {
         emptyList()
     }
@@ -32,7 +32,7 @@ fun getPlaylists(rootDir: String?): Map<String, List<String>> {
             ?: emptyArray()
 
         for (file in files) {
-            musicFiles.add(file.name)
+            musicFiles.add(file.absolutePath)
         }
 
         result[dir.name] = musicFiles

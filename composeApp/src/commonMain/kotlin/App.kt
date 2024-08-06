@@ -35,11 +35,20 @@ object GlobalState {
 @Preview
 fun App(
     mediaPlayerController: MediaPlayerController,
-    rootPicker: suspend () -> String?
+    makeLibrary: suspend () -> Library?
 ) {
     val navController: NavHostController = rememberNavController()
     var songsList: List<String> = emptyList()
     var currentSong: String? = null
+    var library: Library? by remember { mutableStateOf(null) }
+    LaunchedEffect(Unit) {
+        library = makeLibrary()
+        if (library != null) {
+            for (song in library!!.getSongs()) {
+                println(song)
+            }
+        }
+    }
 
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
@@ -80,21 +89,23 @@ fun App(
                 }
             },
             content = {
-                NavHost(
-                    navController = navController,
-                    startDestination = "home_page",
+                if (library != null) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = "home_page",
 
-                    ) {
-                    composable(
-                        route = "music_player",
-                    ) {
-                        MusicPlayer(mediaPlayerController)
-                    }
-                    composable(route = "home_page") {
-                        HomePage()
-                    }
-                    composable(route = "playlist_screen") {
-                        PlayLists(mediaPlayerController, navController, rootPicker)
+                        ) {
+                        composable(
+                            route = "music_player",
+                        ) {
+                            MusicPlayer(mediaPlayerController, library!!)
+                        }
+                        composable(route = "home_page") {
+                            HomePage()
+                        }
+                        composable(route = "playlist_screen") {
+                            PlayLists(mediaPlayerController, navController, library!!)
+                        }
                     }
                 }
             }
