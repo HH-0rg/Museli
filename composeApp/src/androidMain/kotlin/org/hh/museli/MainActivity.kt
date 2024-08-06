@@ -3,8 +3,7 @@ package org.hh.museli
 import AndroidLibrary
 import App
 import Library
-import MediaPlayerController
-import PlatformContext
+import AndroidController
 import android.Manifest.permission.READ_MEDIA_AUDIO
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -12,8 +11,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import io.github.vinceglb.filekit.core.FileKit
@@ -53,7 +50,7 @@ class MainActivity : ComponentActivity() {
             FileKit.init(this@MainActivity)
 
             setContent {
-                App(mediaPlayerController = MediaPlayerController(PlatformContext(applicationContext)), libraryProvider)
+                App(mediaPlayerController = AndroidController(applicationContext), libraryProvider)
             }
         }
     }

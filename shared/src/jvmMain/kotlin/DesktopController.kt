@@ -6,7 +6,7 @@ import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter
 import uk.co.caprica.vlcj.player.component.AudioPlayerComponent
 
 
-actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
+class DesktopController: MediaPlayerController {
     private var mediaPlayer: MediaPlayer? = null
     private var listener: MediaPlayerListener? = null
 
@@ -33,7 +33,7 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         })
     }
 
-    actual fun prepare(
+    override fun prepare(
         songUri: String, listener: MediaPlayerListener
     ) {
         if (mediaPlayer == null) {
@@ -48,35 +48,35 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
         mediaPlayer?.media()?.play(songUri)
     }
 
-    actual fun start() {
+    override fun start() {
         mediaPlayer?.controls()?.start()
     }
 
-    actual fun pause() {
+    override fun pause() {
         mediaPlayer?.controls()?.pause()
     }
 
-    actual fun stop() {
+    override fun stop() {
         mediaPlayer?.controls()?.stop()
     }
 
-    actual fun isPlaying(): Boolean {
+    override fun isPlaying(): Boolean {
         return mediaPlayer?.status()?.isPlaying ?: false
     }
 
-    actual fun seek(): Long? {
+    override fun seek(): Long? {
         return mediaPlayer?.status()?.time()
     }
 
-    actual fun mediaDuration(): Long? {
+    override fun mediaDuration(): Long? {
         return mediaPlayer?.status()?.length()
     }
 
-    actual fun setTime(time: Long) {
+    override fun setTime(time: Long) {
         mediaPlayer?.controls()?.setTime(time)
     }
     
-    actual fun release() {
+    override fun release() {
         mediaPlayer?.release()
     }
 }

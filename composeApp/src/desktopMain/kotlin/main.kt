@@ -16,7 +16,6 @@ fun main(args: Array<String>) = application {
         onCloseRequest = ::exitApplication,
         title = "Museli",
     ) {
-        val mediaPlayerController = MediaPlayerController(PlatformContext())
         val libraryProvider: suspend () -> Library? = {
             val dir = FileKit.pickDirectory()?.path
             if (dir != null) {
@@ -26,7 +25,7 @@ fun main(args: Array<String>) = application {
             }
         }
 
-        App(mediaPlayerController, libraryProvider)
+        App(DesktopController(), libraryProvider)
 
 //      This code allows you to get data from a server
 //        val scope = rememberCoroutineScope()

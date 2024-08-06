@@ -1,5 +1,5 @@
 // Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
-expect class MediaPlayerController(platformContext: PlatformContext) {
+interface MediaPlayerController {
     fun prepare(songUri: String, listener: MediaPlayerListener)
 
     fun start()
@@ -18,6 +18,3 @@ expect class MediaPlayerController(platformContext: PlatformContext) {
 
     fun setTime(time: Long)
 }
-
-// TODO: remove PlatformContext
-expect class PlatformContext
