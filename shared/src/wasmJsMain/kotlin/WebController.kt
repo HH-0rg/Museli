@@ -3,9 +3,9 @@
 import kotlinx.browser.document
 import org.w3c.dom.HTMLAudioElement
 
-actual class MediaPlayerController actual constructor(val platformContext: PlatformContext) {
+class WebController: MediaPlayerController {
     private val audioElement = document.createElement("audio") as HTMLAudioElement
-    actual fun prepare(
+    override fun prepare(
         songUri: String,
         listener: MediaPlayerListener
     ) {
@@ -27,34 +27,34 @@ actual class MediaPlayerController actual constructor(val platformContext: Platf
 
     }
 
-    actual fun start() {
+    override fun start() {
         audioElement.play()
     }
 
-    actual fun pause() {
+    override fun pause() {
         audioElement.pause()
     }
 
-    actual fun stop() {
+    override fun stop() {
     }
 
-    actual fun isPlaying(): Boolean {
+    override fun isPlaying(): Boolean {
         return !audioElement.paused
     }
 
-    actual fun seek(): Long? {
+    override fun seek(): Long? {
         return audioElement.currentTime.toLong()
     }
 
-    actual fun mediaDuration(): Long? {
+    override fun mediaDuration(): Long? {
         return audioElement.duration.toLong()
     }
 
-    actual fun setTime(time: Long) {
+    override fun setTime(time: Long) {
 //        mediaPlayer?.controls()?.setTime(time)
         audioElement.currentTime = time.toDouble()
     }
 
-    actual fun release() {
+    override fun release() {
     }
 }

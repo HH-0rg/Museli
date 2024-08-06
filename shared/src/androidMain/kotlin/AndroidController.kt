@@ -1,8 +1,7 @@
 // Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
 
+import android.content.Context
 import android.net.Uri
-import android.provider.MediaStore
-import androidx.documentfile.provider.DocumentFile
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -11,10 +10,10 @@ import androidx.media3.common.Player.STATE_READY
 import androidx.media3.exoplayer.ExoPlayer
 import java.io.File
 
-actual class MediaPlayerController actual constructor(private val platformContext: PlatformContext) {
-    val player = ExoPlayer.Builder(platformContext.applicationContext).build()
+class AndroidController(private val context: Context): MediaPlayerController {
+    val player = ExoPlayer.Builder(context).build()
 
-    actual fun prepare(songUri: String, listener: MediaPlayerListener) {
+    override fun prepare(songUri: String, listener: MediaPlayerListener) {
 
         val mediaItem = MediaItem.fromUri(Uri.fromFile(File(songUri)))
         player.addListener(object : Player.Listener {
@@ -43,24 +42,24 @@ actual class MediaPlayerController actual constructor(private val platformContex
         }
     }
 
-    actual fun start() {
+    override fun start() {
         player.play()
     }
 
-    actual fun pause() {
+    override fun pause() {
         if (player.isPlaying)
             player.pause()
     }
 
-    actual fun stop() {
+    override fun stop() {
         player.stop()
     }
 
-    actual fun release() {
+    override fun release() {
         player.release()
     }
 
-    actual fun seek(): Long? {
+    override fun seek(): Long? {
         println(player.currentPosition)
         println(player.duration)
         println(player.contentDuration)
@@ -72,15 +71,15 @@ actual class MediaPlayerController actual constructor(private val platformContex
         return  player.contentPosition
     }
 
-    actual fun mediaDuration(): Long? {
+    override fun mediaDuration(): Long? {
         return player.duration
     }
 
-    actual fun setTime(time: Long) {
+    override fun setTime(time: Long) {
         player.seekTo(time)
     }
 
-    actual fun isPlaying(): Boolean {
+    override fun isPlaying(): Boolean {
         return player.isPlaying
     }
 }

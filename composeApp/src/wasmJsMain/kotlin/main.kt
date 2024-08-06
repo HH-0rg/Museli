@@ -1,6 +1,5 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
-import io.github.vinceglb.filekit.core.FileKit
 import kotlinx.browser.document
 import kotlinx.browser.window
 
@@ -17,6 +16,6 @@ fun main() {
     }
 
     ComposeViewport(document.body!!) {
-        App(MediaPlayerController(PlatformContext()), libraryProvider)
+        App(WebController(), libraryProvider)
     }
 }
