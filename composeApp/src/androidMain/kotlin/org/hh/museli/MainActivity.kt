@@ -1,6 +1,8 @@
 package org.hh.museli
 
+import AndroidLibrary
 import App
+import Library
 import MediaPlayerController
 import PlatformContext
 import android.Manifest.permission.READ_MEDIA_AUDIO
@@ -38,11 +40,20 @@ class MainActivity : ComponentActivity() {
             requestPermissionLauncher.launch(READ_MEDIA_AUDIO)
         }
 
+        val libraryProvider: suspend () -> Library? = {
+            val dir = FileKit.pickDirectory()?.path
+            if (dir != null) {
+                AndroidLibrary(dir, applicationContext)
+            } else {
+                null
+            }
+        }
+
         lifecycleScope.launch {
             FileKit.init(this@MainActivity)
 
             setContent {
-                App(mediaPlayerController = MediaPlayerController(PlatformContext(applicationContext, null))) { FileKit.pickDirectory()?.path }
+                App(mediaPlayerController = MediaPlayerController(PlatformContext(applicationContext)), libraryProvider)
             }
         }
     }

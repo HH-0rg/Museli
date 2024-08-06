@@ -12,7 +12,11 @@ fun main() {
         "/"
     }
 
+    val libraryProvider: suspend () -> Library? = {
+        WebLibrary(root)
+    }
+
     ComposeViewport(document.body!!) {
-        App(MediaPlayerController(PlatformContext(root))) { root }
+        App(MediaPlayerController(PlatformContext()), libraryProvider)
     }
 }

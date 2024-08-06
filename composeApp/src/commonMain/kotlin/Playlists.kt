@@ -31,6 +31,7 @@ fun ExpandableSection(
     songs: List<String>,
     navController: NavHostController,
     mediaPlayerController: MediaPlayerController,
+    library: Library,
     songsList: List<String>
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -60,7 +61,7 @@ fun ExpandableSection(
                         color = Color.White,
                         modifier = Modifier
                             .clickable {
-                                mediaPlayerController.setCurrentSongIdx(songsList.indexOf(song))
+                                library.setCurrentSongIdx(songsList.indexOf(song))
                                 navController.navigate("music_player")
                             }
                             .fillMaxWidth()
@@ -78,23 +79,14 @@ fun ExpandableSection(
 fun PlayLists(
     mediaPlayerController: MediaPlayerController,
     navController: NavHostController,
-    rootPicker: suspend () -> String?
+    library: Library
 ) {
     var songsList by remember { mutableStateOf(emptyList<String>()) }
     var playlists by remember { mutableStateOf<Map<String, List<String>>>(emptyMap()) }
-    var rootDir by remember { mutableStateOf<String?>(GlobalState.rootDirectory) }
 
     LaunchedEffect(Unit) {
-        if (rootDir == null) {
-            rootDir = rootPicker()
-            rootDir?.let {
-                mediaPlayerController.setRoot(it)
-                GlobalState.rootDirectory = it.toString()
-            }
-        }
-        val loadedSongs = mediaPlayerController.loadSongList()
-        playlists = mediaPlayerController.loadPlaylists()
-        songsList = loadedSongs
+        songsList = library.getSongs()
+        playlists = library.getPlaylists()
     }
 
     return Scaffold(
@@ -114,7 +106,7 @@ fun PlayLists(
 
             LazyColumn {
                 items(playlists.entries.toList()) { (directory, songs) ->
-                    ExpandableSection(directory = directory, songs = songs, navController, mediaPlayerController, songsList)
+                    ExpandableSection(directory = directory, songs = songs, navController, mediaPlayerController, library, songsList)
                 }
             }
             LazyColumn {
@@ -123,7 +115,7 @@ fun PlayLists(
                         color = Color.White,
                         modifier = Modifier
                             .clickable {
-                                mediaPlayerController.setCurrentSongIdx(song)
+                                library.setCurrentSongIdx(song)
                                 navController.navigate("music_player")
                             }
                             .fillMaxWidth()
