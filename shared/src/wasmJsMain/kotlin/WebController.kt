@@ -1,5 +1,3 @@
-// Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
-
 import kotlinx.browser.document
 import org.w3c.dom.HTMLAudioElement
 

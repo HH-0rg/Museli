@@ -1,5 +1,3 @@
-// Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
-
 import android.content.Context
 import android.net.Uri
 import androidx.media3.common.MediaItem

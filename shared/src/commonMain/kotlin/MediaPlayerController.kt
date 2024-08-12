@@ -1,4 +1,3 @@
-// Thanks to https://github.com/SEAbdulbasit/MusicApp-KMP/
 interface MediaPlayerController {
     fun prepare(songUri: String, listener: MediaPlayerListener)
 
