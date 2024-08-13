@@ -1,10 +1,8 @@
 import java.io.File
-import java.io.FileInputStream
-import java.io.InputStream
 
 var SongExtensions = listOf("mp3", "wav", "flac", "opus", "m4a")
 
-fun getSongs(rootDir: String?): List<String> {
+fun getSongs(rootDir: String): List<String> {
     val safeRootDir = rootDir ?: return emptyList() // Handle null case if necessary
 
     val directory = File(safeRootDir)
@@ -16,11 +14,11 @@ fun getSongs(rootDir: String?): List<String> {
     }
 }
 
-fun getPlaylists(rootDir: String?): Map<String, List<String>> {
-    val rootDir_ = rootDir?.let { File(it) } ?: return emptyMap()
+fun getPlaylists(rootDir: String): Map<String, List<String>> {
+    val rootDirFile = File(rootDir);
     val result = mutableMapOf<String, MutableList<String>>()
 
-    val directories = rootDir_.listFiles { file -> file.isDirectory } ?: emptyArray()
+    val directories = rootDirFile.listFiles { file -> file.isDirectory } ?: emptyArray()
 
     for (dir in directories) {
         val musicFiles = mutableListOf<String>()
