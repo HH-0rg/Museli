@@ -1,10 +1,10 @@
 import android.content.Context
 import android.provider.MediaStore
 
-class AndroidLibrary(private val rootDir: String, val applicationContext: Context): Library {
-    private val songsList: MutableList<String> = mutableListOf()
-    private var currentSongIndex: Int? = null
-    override suspend fun getSongs(): List<String> {
+class AndroidLibrary(private val rootDir: String, val applicationContext: Context): Library() {
+    override var songsList: List<String>
+    override var playlists: Map<String, List<String>>
+    init {
         check(rootDir.startsWith("/tree/primary:")) { "Only directories on primary storage are supported, invalid dir: $rootDir" }
         val folderName = rootDir.substringAfter(":") // Gets the path after 'primary:'
         val queryUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -32,13 +32,9 @@ class AndroidLibrary(private val rootDir: String, val applicationContext: Contex
             }
         }
 
-        songsList.clear()
-        songsList.addAll(tempAudioList)
-        currentSongIndex = if (songsList.isNotEmpty()) 0 else null
-        return songsList
-    }
-    override suspend fun getPlaylists(): Map<String, List<String>> {
-//        val folderName = rootDir.substringAfter(":") // Gets the path after 'primary:'
+        songsList = tempAudioList
+
+        //        val folderName = rootDir.substringAfter(":") // Gets the path after 'primary:'
 //        val queryUri = when {
 //            rootDir.startsWith("/tree/primary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 //            rootDir.startsWith("/tree/secondary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Adjust as needed for secondary storage
@@ -84,7 +80,7 @@ class AndroidLibrary(private val rootDir: String, val applicationContext: Contex
 
         // fuck you android studio >:(
         // crashing at each compile in the final hours....
-        return mapOf(
+        playlists = mapOf(
             "playlist" to listOf(
                 "first death.mp3",
                 "Geoxor_-_Aether.mp3",
@@ -114,24 +110,5 @@ class AndroidLibrary(private val rootDir: String, val applicationContext: Contex
                 "DECO＊27 - シンデレラ feat. 初音ミク [adGhT_-JbZI].mp3"
             )
         )
-    }
-    override fun nextTrack() {
-        if (songsList.isNotEmpty() && currentSongIndex != null) {
-            currentSongIndex = (currentSongIndex!! + 1) % songsList.size
-        }
-    }
-
-    override fun previousTrack() {
-        if (songsList.isNotEmpty() && currentSongIndex != null) {
-            currentSongIndex = (currentSongIndex!! - 1 + songsList.size) % songsList.size
-        }
-    }
-
-    override fun getCurrentSong(): String? {
-        return currentSongIndex?.let { songsList[it] }
-    }
-
-    override fun setCurrentSongIdx(idx: Int) {
-        currentSongIndex = idx
     }
 }
