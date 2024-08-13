@@ -85,8 +85,8 @@ fun PlayLists(
     var playlists by remember { mutableStateOf<Map<String, List<String>>>(emptyMap()) }
 
     LaunchedEffect(Unit) {
-        songsList = library.getSongs()
-        playlists = library.getPlaylists()
+        songsList = library.songsList
+        playlists = library.playlists
     }
 
     return Scaffold(

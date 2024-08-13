@@ -1,12 +1,18 @@
-interface Library {
-    suspend fun getPlaylists(): Map<String, List<String>>
-    suspend fun getSongs(): List<String>
+abstract class Library {
+    abstract var songsList: List<String>
+    abstract var playlists: Map<String, List<String>>
+    var currentSongIndex: Int = 0
+    fun nextTrack() {
+        currentSongIndex = (currentSongIndex + 1) % songsList.size
+    }
 
-    fun nextTrack()
+    fun previousTrack() {
+        currentSongIndex = (currentSongIndex - 1 + songsList.size) % songsList.size
+    }
 
-    fun previousTrack()
+    fun getCurrentSong() = songsList[currentSongIndex]
 
-    fun getCurrentSong(): String?
-
-    fun setCurrentSongIdx(idx: Int)
+    fun setCurrentSongIdx(idx: Int) {
+        currentSongIndex = idx
+    }
 }
