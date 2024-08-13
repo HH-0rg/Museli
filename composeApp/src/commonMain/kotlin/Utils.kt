@@ -18,3 +18,5 @@ fun formatDuration(milliseconds: Long?): String {
         "${pad(minutes.toInt())}:${pad(seconds.toInt())}"
     }
 }
+
+fun nullError() = "got null directory from filepicker"

@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import io.github.vinceglb.filekit.core.FileKit
 import kotlinx.coroutines.launch
+import nullError
 
 class MainActivity : ComponentActivity() {
 
@@ -37,13 +38,11 @@ class MainActivity : ComponentActivity() {
             requestPermissionLauncher.launch(READ_MEDIA_AUDIO)
         }
 
-        val libraryProvider: suspend () -> Library? = {
+        val libraryProvider: suspend () -> Library = {
             val dir = FileKit.pickDirectory()?.path
-            if (dir != null) {
-                AndroidLibrary(dir, applicationContext)
-            } else {
-                null
-            }
+            check(dir != null, ::nullError)
+            check(dir.startsWith("/tree/primary:")) { "only directories on primary storage are supported, invalid dir: $dir" }
+            AndroidLibrary(dir, applicationContext)
         }
 
         lifecycleScope.launch {

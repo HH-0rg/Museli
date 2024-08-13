@@ -16,13 +16,10 @@ fun main(args: Array<String>) = application {
         onCloseRequest = ::exitApplication,
         title = "Museli",
     ) {
-        val libraryProvider: suspend () -> Library? = {
+        val libraryProvider: suspend () -> Library = {
             val dir = FileKit.pickDirectory()?.path
-            if (dir != null) {
-                DesktopLibrary(dir)
-            } else {
-                null
-            }
+            check(dir != null, ::nullError)
+            DesktopLibrary(dir)
         }
 
         App(DesktopController(), libraryProvider)

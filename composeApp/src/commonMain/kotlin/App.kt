@@ -35,7 +35,7 @@ object GlobalState {
 @Preview
 fun App(
     mediaPlayerController: MediaPlayerController,
-    makeLibrary: suspend () -> Library?
+    makeLibrary: suspend () -> Library
 ) {
     val navController: NavHostController = rememberNavController()
     var songsList: List<String> = emptyList()
