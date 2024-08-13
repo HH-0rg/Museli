@@ -11,7 +11,7 @@ fun main() {
         "/"
     }
 
-    val libraryProvider: suspend () -> Library? = {
+    val libraryProvider: suspend () -> Library = {
         WebLibrary(root)
     }
 
