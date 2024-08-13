@@ -14,5 +14,6 @@ class WebLibrary(private val rootUrl: String): CoroutineScope by CoroutineScope(
             "$rootUrl$SongEp/$fileName"  // Construct the URL
         }
         playlists = getPlaylistsRemote(rootUrl)
+        checkSongsList()
     }
 }

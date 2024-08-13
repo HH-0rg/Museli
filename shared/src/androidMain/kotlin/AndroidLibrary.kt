@@ -33,6 +33,7 @@ class AndroidLibrary(private val rootDir: String, val applicationContext: Contex
         }
 
         songsList = tempAudioList
+        checkSongsList()
 
         //        val folderName = rootDir.substringAfter(":") // Gets the path after 'primary:'
 //        val queryUri = when {
