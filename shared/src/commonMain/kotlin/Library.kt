@@ -15,4 +15,8 @@ abstract class Library {
     fun setCurrentSongIdx(idx: Int) {
         currentSongIndex = idx
     }
+
+    protected fun checkSongsList() {
+        check(songsList.isNotEmpty()) { "no songs found in library" }
+    }
 }
