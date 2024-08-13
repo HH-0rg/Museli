@@ -5,11 +5,10 @@ class AndroidLibrary(private val rootDir: String, val applicationContext: Contex
     private val songsList: MutableList<String> = mutableListOf()
     private var currentSongIndex: Int? = null
     override suspend fun getSongs(): List<String> {
-        val safeRootDir = rootDir ?: return emptyList() // Handle null case if necessary
-        val folderName = safeRootDir.substringAfter(":") // Gets the path after 'primary:'
+        val folderName = rootDir.substringAfter(":") // Gets the path after 'primary:'
         val queryUri = when {
-            safeRootDir.startsWith("/tree/primary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-            safeRootDir.startsWith("/tree/secondary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Adjust as needed for secondary storage
+            rootDir.startsWith("/tree/primary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            rootDir.startsWith("/tree/secondary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Adjust as needed for secondary storage
             else -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Default URI
         }
 
@@ -43,11 +42,10 @@ class AndroidLibrary(private val rootDir: String, val applicationContext: Contex
         return songsList
     }
     override suspend fun getPlaylists(): Map<String, List<String>> {
-//        val safeRootDir = platformContext.rootDir ?: return emptyMap() // Handle null case if necessary
-//        val folderName = safeRootDir.substringAfter(":") // Gets the path after 'primary:'
+//        val folderName = rootDir.substringAfter(":") // Gets the path after 'primary:'
 //        val queryUri = when {
-//            safeRootDir.startsWith("/tree/primary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-//            safeRootDir.startsWith("/tree/secondary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Adjust as needed for secondary storage
+//            rootDir.startsWith("/tree/primary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+//            rootDir.startsWith("/tree/secondary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Adjust as needed for secondary storage
 //            else -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Default URI
 //        }
 //        val queryUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI

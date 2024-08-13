@@ -8,18 +8,18 @@ class WebController: MediaPlayerController {
         listener: MediaPlayerListener
     ) {
         audioElement.src = songUri
-        audioElement.addEventListener("canplaythrough", {
+        audioElement.addEventListener("canplaythrough") {
             // Audio is ready to play without interruption
             listener.onReady()
             audioElement.play()
-        })
+        }
 
         audioElement.onended = {
             listener.onAudioCompleted()
         }
-        audioElement.addEventListener("error", {
+        audioElement.addEventListener("error") {
             listener.onError()
-        })
+        }
 
     }
 
@@ -47,7 +47,6 @@ class WebController: MediaPlayerController {
     }
 
     override fun setTime(time: Long) {
-//        mediaPlayer?.controls()?.setTime(time)
         audioElement.currentTime = time.toDouble()
     }
 
