@@ -33,7 +33,6 @@ suspend fun getSongsRemote(remote: String): List<String> {
 
     return try {
         val req = joinUrls(remote, ListSongsEp)
-        println(req)
         client.get(req).body<Songs>().songs
     } catch (e: Exception) {
         println("Error fetching songs: ${e.message}")
@@ -52,7 +51,6 @@ suspend fun getPlaylistsRemote(remote: String): Map<String, List<String>> {
 
     return try {
         val req = joinUrls(remote, ListPlaylistsEp)
-        println(req)
         client.get(req).body<Playlists>().playlists
     } catch (e: Exception) {
         println("Error fetching playlists: ${e.message}")

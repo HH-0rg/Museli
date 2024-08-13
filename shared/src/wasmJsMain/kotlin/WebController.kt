@@ -7,8 +7,6 @@ class WebController: MediaPlayerController {
         songUri: String,
         listener: MediaPlayerListener
     ) {
-        println("listening to")
-        println(songUri)
         audioElement.src = songUri
         audioElement.addEventListener("canplaythrough", {
             // Audio is ready to play without interruption
