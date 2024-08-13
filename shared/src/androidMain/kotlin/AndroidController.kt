@@ -4,15 +4,16 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
+import androidx.media3.common.Player.STATE_BUFFERING
+import androidx.media3.common.Player.STATE_IDLE
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.exoplayer.ExoPlayer
 import java.io.File
 
-class AndroidController(private val context: Context): MediaPlayerController {
+class AndroidController(context: Context): MediaPlayerController {
     val player = ExoPlayer.Builder(context).build()
 
     override fun prepare(songUri: String, listener: MediaPlayerListener) {
-
         val mediaItem = MediaItem.fromUri(Uri.fromFile(File(songUri)))
         player.addListener(object : Player.Listener {
             override fun onPlayerError(error: PlaybackException) {
@@ -25,6 +26,8 @@ class AndroidController(private val context: Context): MediaPlayerController {
                 when (playbackState) {
                     STATE_READY -> listener.onReady()
                     STATE_ENDED -> listener.onAudioCompleted()
+                    STATE_BUFFERING -> { }
+                    STATE_IDLE -> { }
                 }
             }
 
@@ -33,11 +36,9 @@ class AndroidController(private val context: Context): MediaPlayerController {
                 listener.onError()
             }
         })
-        if (mediaItem != null) {
-            player.setMediaItem(mediaItem)
-            player.prepare()
-            player.play()
-        }
+        player.setMediaItem(mediaItem)
+        player.prepare()
+        player.play()
     }
 
     override fun start() {
