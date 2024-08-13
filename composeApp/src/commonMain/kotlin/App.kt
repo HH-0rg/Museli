@@ -43,11 +43,6 @@ fun App(
     var library: Library? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
         library = makeLibrary()
-        if (library != null) {
-            for (song in library!!.getSongs()) {
-                println(song)
-            }
-        }
     }
 
     MaterialTheme {

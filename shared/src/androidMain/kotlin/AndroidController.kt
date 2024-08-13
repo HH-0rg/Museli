@@ -58,14 +58,6 @@ class AndroidController(private val context: Context): MediaPlayerController {
     }
 
     override fun seek(): Long? {
-        println(player.currentPosition)
-        println(player.duration)
-        println(player.contentDuration)
-        println(player.contentPosition)
-        println(player.currentMediaItem)
-        println("player.currentMediaItem")
-
-
         return  player.contentPosition
     }
 

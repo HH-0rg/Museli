@@ -60,15 +60,12 @@ fun MusicPlayer(
                 library.getCurrentSong()!!,
                 listener = object : MediaPlayerListener {
                     override fun onReady() {
-                        println("ready")
                     }
 
                     override fun onAudioCompleted() {
-                        println("audio completed")
                     }
 
                     override fun onError() {
-                        println("error")
                     }
                 })
             mediaPlayerController.start()
@@ -87,9 +84,7 @@ fun MusicPlayer(
 //        while (mediaPlayerController.isPlaying()) { // need to comment this out for android
         while (true) {
             delay(1000) // Update every second
-            println(mediaPlayerController.seek())
             currentPosition = if (mediaPlayerController.seek() != null) mediaPlayerController.seek()!! else 0L
-            println("current $currentPosition")
         }
     }
 

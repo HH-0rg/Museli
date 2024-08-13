@@ -36,9 +36,6 @@ fun Application.module(args: Array<String>) {
     val rootDir = args[0]
     val frontendDomain = args[1]
 
-    println("Inside module")
-    println(rootDir)
-    println(frontendDomain)
     install(ContentNegotiation) {
         json() // Use default JSON serialization
     }
