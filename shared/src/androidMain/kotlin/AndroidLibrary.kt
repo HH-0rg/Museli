@@ -5,12 +5,9 @@ class AndroidLibrary(private val rootDir: String, val applicationContext: Contex
     private val songsList: MutableList<String> = mutableListOf()
     private var currentSongIndex: Int? = null
     override suspend fun getSongs(): List<String> {
+        check(rootDir.startsWith("/tree/primary:")) { "Only directories on primary storage are supported, invalid dir: $rootDir" }
         val folderName = rootDir.substringAfter(":") // Gets the path after 'primary:'
-        val queryUri = when {
-            rootDir.startsWith("/tree/primary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-            rootDir.startsWith("/tree/secondary") -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Adjust as needed for secondary storage
-            else -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI // Default URI
-        }
+        val queryUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 
         val tempAudioList = mutableListOf<String>()
         val projection = arrayOf(
@@ -35,7 +32,6 @@ class AndroidLibrary(private val rootDir: String, val applicationContext: Contex
             }
         }
 
-//        return tempAudioList
         songsList.clear()
         songsList.addAll(tempAudioList)
         currentSongIndex = if (songsList.isNotEmpty()) 0 else null

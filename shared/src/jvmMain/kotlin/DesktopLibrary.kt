@@ -6,7 +6,7 @@ class DesktopLibrary(private val rootDir: String): Library {
     }
 
     override suspend fun getSongs(): List<String> {
-        var tempSongsList = getSongs(rootDir)
+        val tempSongsList = getSongs(rootDir)
         songsList.clear()
         songsList.addAll(tempSongsList)
         currentSongIndex = if (songsList.isNotEmpty()) 0 else null
